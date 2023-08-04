@@ -1,0 +1,137 @@
+body{
+  margin: 0;
+}
+
+.addinput {
+  margin-top: -657px;
+  margin-left: 200px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+}
+body .addinput{
+  background-color: rgb(173, 167, 167);
+  height: 100vh;
+}
+ .container {
+/* margin-top: 70px; */
+margin: -17px;
+text-align: center;
+
+}
+.innercontainer {
+  color: white;
+}
+ .tableContainer {
+  margin-top: 10px;
+margin-left: 350px;
+color: white;
+padding: 10px;
+
+
+} 
+label{
+  margin-right: 400px;
+}
+ .date{
+  margin-left: -328px;
+  margin-top: -10px;
+  padding: 7px;
+width: 187px; }
+.create{
+  background-color:  rgb(93, 112, 221);
+  margin-left: -900px;
+  color: black;
+  /* padding-bottom: 100px; */
+  /* text-underline-offset: none; */
+  padding: 10px;
+  text-decoration-line: none;
+ 
+}
+.error{
+  color: red;
+  margin-right: 400px;
+  font-size: small;
+
+}
+
+
+.tableContainer td{
+  background-color: rgb(250, 250, 245);
+  color: black;
+}
+.container p{
+  padding: 30px;
+  background-color: rgb(148, 142, 142);
+}
+.innercontainer{
+  margin-top: -18px;
+  /* background-color: rgb(223, 193, 200); */
+  /* background-color:rgb(139, 139, 137); */
+  background-color: rgb(148, 142, 142);
+  width: 200px;
+  height: 100vh;
+  
+}
+input[type=text]
+{
+  height: 2em;
+  width: 200px;
+  display: block; 
+  margin: 0 325px;
+}
+.lableinput{
+  display:flex;
+
+}
+ .updatebutton{
+  /* background-color:  rgb(41, 38, 39); */
+  background-color: rgb(70, 207, 116) ;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100px;
+  color: black;
+  /* margin-left: -220px; */
+}
+.updatebutton1{
+  background-color: rgb(70, 207, 116) ;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100px;
+  color: black;
+  margin-left: -325px;
+}
+
+.deletebutton {
+  background-color: rgb(221, 93, 93) ;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100px;
+  color: black;
+}
+.addbutton {
+  background-color: rgb(93, 112, 221) ;
+  border-radius: 10px;
+  padding: 10px;
+  width: 100px;
+  color: black;
+  margin-left: -310px;
+}
+.theading{
+  font-weight: bold
+}
+.delete1{
+  background-color: rgb(219, 55, 55);
+   margin-left: 50px;  
+}
+.edit{
+  margin-left: 30px; 
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
