@@ -1,24 +1,11 @@
-//import cors from "cors";
-//import bodyParser from "body-parser";
-//import { Express } from "express";
-
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const port = 5000;
 
-// const inputDate = "6.6.2020";
-// const parts = inputDate.split(".");
-// const formattedDate = `${parts[2]}-${parts[1].padStart(
-//   2,
-//   "0"
-// )}-${parts[0].padStart(2, "0")}`;
-// console.log(formattedDate);
-// Output: "2020-06-06"
-
 let data = [
-  { id: 1, names: "John Doe", Experiences: 30, dojs: "2000-01-03" },
+  { id: 1, names: "hbmju", Experiences: 1, dojs: "2000-01-03" },
   { id: 2, names: "Jane Smith", Experiences: 2, dojs: "2020-06-06" },
   // Add more sample data here
 ];
@@ -64,7 +51,8 @@ app.put("/api/data/:id", express.json(), (req, res) => {
     return item;
   });
 
-  //res.json(updatedItem);
+  res.json(data);
+  //res.json(item);
 });
 
 // Delete data by ID
