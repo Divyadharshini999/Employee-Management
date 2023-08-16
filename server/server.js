@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const port = 5000;
+const mysql = require("mysql2");
 
 let data = [
   { id: 1, names: "hbmju", Experiences: 1, dojs: "2000-01-03" },
@@ -14,13 +15,36 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
+//connect mysql
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "root",
+  database: "firstdb",
+});
+
+db.connect((err) => {
+  if (err) {
+    console.error("Error connecting to mysql:", err);
+    return;
+  }
+  console.log("connected to mysql");
+});
+
 // Get all data
-app.get("/api/data", (req, res) => {
-  res.json(data);
+app.get("/api/emplyee_management", (req, res) => {
+  db.query("SELECT * FROM emplyee_management", (err, data) => {
+    if (err) {
+      console.error("Error connecting to mysql:", err);
+      res.status(500).send("Error fetching data");
+      return;
+    }
+    res.json(data);
+  });
 });
 
 // Get data by ID
-app.get("/api/data/:id", (req, res) => {
+app.get("/api/emplyee_management/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const item = data.find((item) => item.id === id);
 
@@ -31,37 +55,69 @@ app.get("/api/data/:id", (req, res) => {
   }
 });
 
-// Create new data
-app.post("/api/data", express.json(), (req, res) => {
-  const newItem = req.body;
-  newItem.id = data.length + 1;
-  data.push(newItem);
-  res.status(201).json(newItem);
+//create new data
+app.post("/api/emplyee_management", (req, res) => {
+  const { names, Experiences, dojs } = req.body;
+  if (!names) {
+    return res.status(400).json({ message: "Name is required" });
+  }
+  if (!Experiences) {
+    return res.status(400).json({ message: "Experience is required" });
+  }
+  if (!dojs) {
+    return res.status(400).json({ message: "Date Of Joining is required" });
+  }
+
+  const newItem = { names, Experiences, dojs };
+
+  db.query("INSERT INTO emplyee_management SET ?", newItem, (err, result) => {
+    if (err) {
+      console.error("Error adding employee:", err);
+      return res.status(500).json({ message: "Error adding employee" });
+    }
+    newItem.id = result.insertId;
+    res.status(201).json(newItem);
+  });
 });
 
 // Update data by ID
-app.put("/api/data/:id", express.json(), (req, res) => {
-  const id = parseInt(req.params.id);
-  const updatedItem = req.body;
+app.put("/api/emplyee_management/:id", (req, res) => {
+  const { id } = req.params;
+  const { names, Experiences, dojs } = req.body;
+  if (!names) {
+    return res.status(400).json({ message: "Name is required" });
+  }
+  if (!Experiences) {
+    return res.status(400).json({ message: "Experience is required" });
+  }
+  if (!dojs) {
+    return res.status(400).json({ message: "Date Of Joining is required" });
+  }
 
-  data = data.map((item) => {
-    if (item.id === id) {
-      return { ...item, ...updatedItem };
+  db.query(
+    "UPDATE emplyee_management SET `names`= ?,`Experiences` = ?,`dojs`=? WHERE id = ?",
+    [names, Experiences, dojs, id],
+    (err, data) => {
+      if (err) {
+        console.error("Error updating employee:", err);
+        return res.status(500).json({ message: "Error updating employee" });
+      }
+      res.json({ message: "Employee updated successfully" });
     }
-    return item;
-  });
-
-  res.json(data);
-  //res.json(item);
+  );
 });
 
 // Delete data by ID
-app.delete("/api/data/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-
-  data = data.filter((item) => item.id !== id);
-
-  res.json({ message: "Data deleted successfully" });
+app.delete("/api/emplyee_management/:id", (req, res) => {
+  // const id = parseInt(req.params.id);
+  const id = req.params.id;
+  db.query("DELETE FROM emplyee_management where id = ?", [id], (err, data) => {
+    if (err) {
+      console.error("Error deleting employee:", err);
+      return res.status(500).json({ message: "Error deleting employee" });
+    }
+    res.json({ message: "Employee deleted successfully" });
+  });
 });
 
 app.listen(port, () => {

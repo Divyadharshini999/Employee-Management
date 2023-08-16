@@ -42,7 +42,7 @@ function Create_1() {
       className="inputContainer"
       onSubmit={handleSubmit(async () => {
         //console.log(data);
-        await axios.post("http://localhost:5000/api/data", {
+        await axios.post("http://localhost:5000/api/emplyee_management", {
           names,
           Experiences,
           dojs,

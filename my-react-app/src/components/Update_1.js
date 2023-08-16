@@ -1,7 +1,5 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-//import { API_URL } from "../Constants/Url";
-//import Read_1 from "./Read_1old";
 import { useNavigate } from "react-router-dom";
 
 function Update_1() {
@@ -9,6 +7,7 @@ function Update_1() {
   const [Experiences, setExperiences] = useState("");
   const [dojs, setDoJs] = useState("");
   const [id, setId] = useState("");
+  const [data, setAPIData1] = useState([]);
 
   const navigate1 = useNavigate();
   useEffect(() => {
@@ -24,9 +23,26 @@ function Update_1() {
     setDoJs(localStorage.getItem("dojs"));
   }, []);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    callGetApi1();
+  }, []);
+
+  const callGetApi1 = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/emplyee_management"
+      );
+      setAPIData1(response.data);
+    } catch (error) {
+      // if (response.status === 200) {
+      // setAPIData1(response.data);
+      console.error("Errr fetching data:", error);
+    }
+  };
+
+  const updateb1 = async () => {
     //put method is used for updating
-    await axios.put(`http://localhost:5000/api/data/${id}`, {
+    await axios.put(`http://localhost:5000/api/emplyee_management/${id}`, {
       names,
       Experiences,
       dojs,
@@ -63,7 +79,7 @@ function Update_1() {
       ></input>
       <br></br>
       <br></br>
-      <button type="button" onClick={handleSubmit} className="updatebutton1">
+      <button type="button" onClick={updateb1} className="updatebutton1">
         Update
       </button>
     </div>

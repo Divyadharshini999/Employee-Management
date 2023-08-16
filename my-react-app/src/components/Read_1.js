@@ -8,7 +8,7 @@ function Read_1() {
   const navigate1 = useNavigate();
 
   const deleteUser1 = async (id) => {
-    await axios.delete(`http://localhost:5000/api/data/${id}`);
+    await axios.delete(`http://localhost:5000/api/emplyee_management/${id}`);
     callGetApi1();
   };
   //passing the values to the update page ,we have to use Local Storage
@@ -24,9 +24,15 @@ function Read_1() {
   };
 
   const callGetApi1 = async () => {
-    const response = await axios.get("http://localhost:5000/api/data");
-    if (response.status === 200) {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/emplyee_management"
+      );
       setAPIData1(response.data);
+    } catch (error) {
+      // if (response.status === 200) {
+      // setAPIData1(response.data);
+      console.error("Errr fetching data:", error);
     }
   };
 
