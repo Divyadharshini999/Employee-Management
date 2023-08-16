@@ -7,7 +7,6 @@ function Update_1() {
   const [Experiences, setExperiences] = useState("");
   const [dojs, setDoJs] = useState("");
   const [id, setId] = useState("");
-  const [data, setAPIData1] = useState([]);
 
   const navigate1 = useNavigate();
   useEffect(() => {
@@ -22,23 +21,6 @@ function Update_1() {
     setExperiences(localStorage.getItem("Experiences"));
     setDoJs(localStorage.getItem("dojs"));
   }, []);
-
-  useEffect(() => {
-    callGetApi1();
-  }, []);
-
-  const callGetApi1 = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/emplyee_management"
-      );
-      setAPIData1(response.data);
-    } catch (error) {
-      // if (response.status === 200) {
-      // setAPIData1(response.data);
-      console.error("Errr fetching data:", error);
-    }
-  };
 
   const updateb1 = async () => {
     //put method is used for updating
