@@ -1,78 +1,40 @@
 import React from "react";
-// import AddEmployee from './AddEmployee'
-function EmployeeList() {
-  const person = [
-    {
-      id: 1,
-      Name: "Divya",
-      Experience: "2 Years",
-      Date_Of_Joining: "22.06.2020",
-    },
-    {
-      id: 2,
-      Name: "Divya",
-      Experience: "2 Years",
-      Date_Of_Joining: "22.06.2020",
-    },
-    {
-      id: 3,
-      Name: "Divya",
-      Experience: "2 Years",
-      Date_Of_Joining: "22.06.2020",
-    },
-    {
-      id: 4,
-      Name: "Divyasrii",
-      Experience: "2 Years",
-      Date_Of_Joining: "22.06.2020",
-    },
-  ];
+import { Link, Route, Routes } from "react-router-dom";
+import CreatePage from "./components/CreatePage";
+import ReadPage from "./components/ReadPage";
+import UpdatePage from "./components/UpdatePage";
 
-  const listItems = person.map((element) => {
-    return (
-      <div className="ta">
-        <tr>
-          <td>Name</td>
-        </tr>
-        <table border={1} width="50%" cellPadding={10} bgcolor="lightgray">
-          <tbody>
-            <tr>
-              <td>{element.id}</td>
-              <td>{element.Name}</td>
-              <td>{element.Experience}</td>
-              <td>{element.Date_Of_Joining}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    );
-  });
-  return listItems;
-}
 function App() {
-  return <EmployeeList />;
+  return (
+    <div className="container">
+      <nav class=" navbar  bg-primary ">
+        <div class="container-fluid justify-content-center  ">
+          <span class=" nav navbar-brand mb-0 h1 ">
+            Welome to the react project
+          </span>
+        </div>
+      </nav>
+
+      <div className="innercontainer bg-primary">
+        <br></br>
+        <br></br>
+
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/">
+              Home
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div className="addinput">
+        <Routes>
+          <Route path="/create" element={<CreatePage />} />
+          <Route path="/" element={<ReadPage />} />
+          <Route path="/update/:id" element={<UpdatePage />} />
+        </Routes>
+      </div>
+    </div>
+  );
 }
-
 export default App;
-
-// import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import Create_1 from "./components/Create_1";
-// import Read_1 from "./components/Read_1";
-// import Update_1 from "./components/Update_1";
-// function App(){
-//   return(
-//     <div>
-//       {/* <BrowserRouter> */}
-//       <Routes>
-//         <Route path="/create_1" element={<Create_1/>}/>
-//         <Route path="/read_1" element={<Read_1/>}/>
-//         <Route path="/update_1" element={<Update_1/>}/>
-
-//       </Routes>
-
-//       {/* </BrowserRouter>
-//      */}
-//     </div>
-//   )
-// }
-// export default App

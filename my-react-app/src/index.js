@@ -5,14 +5,12 @@ import "./index.css";
 
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import AddEmployee from "./components/AddEmployee";
-//
+import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <AddEmployee />
-    {/* <Create_1/> */}
+    <App />
   </BrowserRouter>
 );
 

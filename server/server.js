@@ -33,7 +33,8 @@ db.connect((err) => {
 
 // Get all data
 app.get("/api/emplyee_management", (req, res) => {
-  db.query("SELECT * FROM emplyee_management", (err, data) => {
+  const selectQuery = "SELECT * FROM emplyee_management ";
+  db.query(selectQuery, (err, data) => {
     if (err) {
       console.error("Error connecting to mysql:", err);
       res.status(500).send("Error fetching data");
@@ -43,21 +44,29 @@ app.get("/api/emplyee_management", (req, res) => {
   });
 });
 
-// Get data by ID
+// API route to fetch data by ID
 app.get("/api/emplyee_management/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  const item = data.find((item) => item.id === id);
+  const id = req.params.id;
+  const selectQuery = `SELECT names, Experiences,dojs FROM emplyee_management WHERE id = ?`;
 
-  if (item) {
-    res.json(item);
-  } else {
-    res.status(404).json({ message: "Data not found" });
-  }
+  db.query(selectQuery, [id], (err, result) => {
+    if (err) {
+      console.error("Error fetching data:", err);
+      res.status(500).json({ message: "Data fetch failed" });
+    } else {
+      res.json({
+        names: result[0].names,
+        Experiences: result[0].Experiences,
+        dojs: result[0].dojs,
+      });
+    }
+  });
 });
 
 //create new data
 app.post("/api/emplyee_management", (req, res) => {
   const { names, Experiences, dojs } = req.body;
+  const insertQuery = "INSERT INTO emplyee_management SET ?";
   if (!names) {
     return res.status(400).json({ message: "Name is required" });
   }
@@ -70,7 +79,7 @@ app.post("/api/emplyee_management", (req, res) => {
 
   const newItem = { names, Experiences, dojs };
 
-  db.query("INSERT INTO emplyee_management SET ?", newItem, (err, result) => {
+  db.query(insertQuery, newItem, (err, result) => {
     if (err) {
       console.error("Error adding employee:", err);
       return res.status(500).json({ message: "Error adding employee" });
@@ -80,38 +89,29 @@ app.post("/api/emplyee_management", (req, res) => {
   });
 });
 
-// Update data by ID
+// API route to update data by ID
 app.put("/api/emplyee_management/:id", (req, res) => {
-  const { id } = req.params;
+  const id = parseInt(req.params.id);
   const { names, Experiences, dojs } = req.body;
-  if (!names) {
-    return res.status(400).json({ message: "Name is required" });
-  }
-  if (!Experiences) {
-    return res.status(400).json({ message: "Experience is required" });
-  }
-  if (!dojs) {
-    return res.status(400).json({ message: "Date Of Joining is required" });
-  }
 
-  db.query(
-    "UPDATE emplyee_management SET `names`= ?,`Experiences` = ?,`dojs`=? WHERE id = ?",
-    [names, Experiences, dojs, id],
-    (err, data) => {
-      if (err) {
-        console.error("Error updating employee:", err);
-        return res.status(500).json({ message: "Error updating employee" });
-      }
-      res.json({ message: "Employee updated successfully" });
+  // Update data in MySQL
+  const updateQuery =
+    "UPDATE emplyee_management SET `names` = ?,`Experiences`= ?,`dojs`=? WHERE id = ?";
+  db.query(updateQuery, [names, Experiences, dojs, id], (err, result) => {
+    if (err) {
+      console.error("Error updating data:", err);
+      res.status(500).json({ message: "Update failed" });
+    } else {
+      console.log("Data updated successfully");
+      res.json({ message: "Data updated successfully" });
     }
-  );
+  });
 });
-
 // Delete data by ID
 app.delete("/api/emplyee_management/:id", (req, res) => {
-  // const id = parseInt(req.params.id);
   const id = req.params.id;
-  db.query("DELETE FROM emplyee_management where id = ?", [id], (err, data) => {
+  const deleteQuery = "DELETE FROM emplyee_management where id = ?";
+  db.query(deleteQuery, [id], (err, data) => {
     if (err) {
       console.error("Error deleting employee:", err);
       return res.status(500).json({ message: "Error deleting employee" });

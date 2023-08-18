@@ -2,32 +2,21 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 //import { API_URL } from "../Constants/Url";
 import { Link, useNavigate } from "react-router-dom";
+import { API_URL } from "../Constants/Url";
 
-function Read_1() {
+function ReadPage() {
   const [data, setAPIData1] = useState([]);
-  const navigate1 = useNavigate();
+  //const navigate1 = useNavigate();
 
-  const deleteUser1 = async (id) => {
-    await axios.delete(`http://localhost:5000/api/emplyee_management/${id}`);
+  const handleDelete = async (id) => {
+    await axios.delete(`${API_URL}/${id}`);
     callGetApi1();
   };
   //passing the values to the update page ,we have to use Local Storage
-  const updateUser = ({ names, Experiences, dojs, id }) => {
-    //setting the keys and values
-    localStorage.setItem("id", id);
-    localStorage.setItem("names", names);
-    localStorage.setItem("Experiences", Experiences);
-    localStorage.setItem("dojs", dojs);
-
-    //navigate to Update page
-    navigate1("/update");
-  };
 
   const callGetApi1 = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:5000/api/emplyee_management"
-      );
+      const response = await axios.get(API_URL);
       setAPIData1(response.data);
     } catch (error) {
       // if (response.status === 200) {
@@ -47,10 +36,10 @@ function Read_1() {
   return (
     // <div>Read_1</div>
 
-    <div>
+    <div className="readpage">
       <br></br>
       <br></br>
-      <Link to="/create" className="create">
+      <Link to="/create" className="createlink">
         CREATE NEW EMPLOYEE
       </Link>
       <br></br>
@@ -75,17 +64,20 @@ function Read_1() {
             <td>
               <button
                 className="deletebutton"
-                onClick={() => deleteUser1(data.id)}
+                onClick={() => handleDelete(data.id)}
               >
-                Delete
+                DELETE
               </button>
             </td>
 
             {/* for updating the values, all the datas should be pass to Update page*/}
             <td>
-              <button className="updatebutton" onClick={() => updateUser(data)}>
+              {/* <button className="updatebutton" onClick={() => updateUser(data)}>
                 UPDATE
-              </button>
+              </button> */}
+              <Link to={`/update/${data.id} `} className="updatebutton">
+                UPDATE
+              </Link>
             </td>
           </tr>
         ))}
@@ -94,4 +86,4 @@ function Read_1() {
   );
 }
 
-export default Read_1;
+export default ReadPage;

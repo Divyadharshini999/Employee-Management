@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-//import { API_URL } from "../Constants/Url";
 import axios from "axios";
+import { API_URL } from "../Constants/Url";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -20,7 +20,7 @@ const schema = yup.object().shape({
   dojs: yup.string().required("please enter Date Of Joining "),
 });
 
-function Create_1() {
+function CreatePage() {
   const [names, setnames] = useState("");
   const [Experiences, setExperiences] = useState("");
   const [dojs, setDoJs] = useState("");
@@ -39,20 +39,21 @@ function Create_1() {
 
   return (
     <form
-      className="inputContainer"
+      className="inputContainer  form-control-sm  "
       onSubmit={handleSubmit(async () => {
         //console.log(data);
-        await axios.post("http://localhost:5000/api/emplyee_management", {
+        await axios.post(API_URL, {
           names,
           Experiences,
           dojs,
         });
-        navigate1("/read");
+        navigate1("/");
       })}
     >
       {/* for changing or to type something in the textbox, wehave to use "onChange" event function */}
 
       <input
+        class="form-control form-control-sm "
         {...register("names")}
         type="text"
         placeholder="Enetr Name"
@@ -64,6 +65,7 @@ function Create_1() {
       <br></br>
 
       <input
+        class="form-control form-control-sm"
         {...register("Experiences")}
         type="text"
         placeholder="Experience in years"
@@ -74,6 +76,7 @@ function Create_1() {
       <br></br>
 
       <input
+        class="form-control form-control-md"
         {...register("dojs")}
         type="date"
         className="date"
@@ -90,4 +93,4 @@ function Create_1() {
     </form>
   );
 }
-export default Create_1;
+export default CreatePage;
