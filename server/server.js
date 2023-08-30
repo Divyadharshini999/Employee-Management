@@ -164,7 +164,7 @@ app.get("/api/emplyee_management", (req, res) => {
 
 //api get names from leavetypetable
 app.get("/api/leaves", (req, res) => {
-  const query = "SELECT id,leavetypeNames from leavetypeTable1";
+  const query = "SELECT leave_id,leavetypeNames from leavetypenametables";
   connection.query(query, (error, results) => {
     if (error) {
       console.error(error);
@@ -175,8 +175,28 @@ app.get("/api/leaves", (req, res) => {
   });
 });
 
-app.get("/api/leavedetails", (req, res) => {
-  const selectQuery = "SELECT * FROM   leavedetails ";
+app.get("/api/leavedetailstables", (req, res) => {
+  // const selectQuery = "SELECT * FROM   leavedetailstables ";
+  const selectQuery = `
+    SELECT 
+      l.lea_det_id,
+      l.id,
+      l.leave_id,
+      e.names AS selectedEmployee,
+      lt.leavetypeNames AS selectleavetype,
+      l.startDate,
+      l.endDate
+    FROM
+      leavedetailstables AS l
+    LEFT JOIN
+      emplyee_management AS e
+    ON
+      l.id = e.id
+    LEFT JOIN
+      leaveTypeNameTables AS lt
+    ON
+      l.leave_id = lt.leave_id
+  `;
   db.query(selectQuery, (err, data) => {
     if (err) {
       console.error("Error connecting to mysql:", err);
@@ -187,27 +207,23 @@ app.get("/api/leavedetails", (req, res) => {
   });
 });
 
-app.post("/api/leavedetails", (req, res) => {
-  const { id, names, selectleavetype, startDate, endDate } = req.body;
+app.post("/api/leavedetailstables", (req, res) => {
+  const { id, leave_id, startDate, endDate } = req.body;
   const insertQuery =
-    "INSERT INTO leavedetails (id, names, selectleavetype, startDate, endDate) VALUES (?, ?, ?, ?, ?)";
-  if (!id || !names || !selectleavetype || !startDate || !endDate) {
+    "INSERT INTO leavedetailstables (id,leave_id, startDate, endDate) VALUES ( ?, ?, ?,?)";
+  if (!id || !leave_id || !startDate || !endDate) {
     return res
       .status(400)
       .json({ message: "Invalid Data. All fields are required" });
   }
 
-  db.query(
-    insertQuery,
-    [id, names, selectleavetype, startDate, endDate],
-    (err, result) => {
-      if (err) {
-        console.error("Error adding leave details:", err);
-        return res.status(500).json({ message: "Error adding leave details" });
-      }
-      res.status(201).json({ message: "Leave details added successfully" });
+  db.query(insertQuery, [id, leave_id, startDate, endDate], (err, result) => {
+    if (err) {
+      console.error("Error adding leave details:", err);
+      return res.status(500).json({ message: "Error adding leave details" });
     }
-  );
+    res.status(201).json({ message: "Leave details added successfully" });
+  });
 });
 
 app.listen(port, () => {

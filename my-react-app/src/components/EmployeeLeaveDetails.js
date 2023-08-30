@@ -8,16 +8,19 @@ function EmployeeLeaveDetails() {
   const [data, setAPIData1] = useState([]);
 
   const callGetApi1 = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/leavedetails"
-      );
-      setAPIData1(response.data);
-    } catch (error) {
-      // if (response.status === 200) {
-      // setAPIData1(response.data);
-      console.error("Errr fetching data:", error);
-    }
+    // try {
+    const response = await axios
+      .get("http://localhost:5000/api/leavedetailstables")
+      .then((response) => {
+        setAPIData1(response.data);
+        console.log(response.data);
+      })
+
+      .catch((error) => {
+        // if (response.status === 200) {
+        // setAPIData1(response.data);
+        console.error("Errr fetching data:", error);
+      });
   };
   console.log(data);
 
@@ -39,18 +42,18 @@ function EmployeeLeaveDetails() {
       <table className="tableLeave" cellPadding={10}>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Leave Type</th>
-            <th>Starting Date</th>
-            <th>Ending Date</th>
+            <th>SI.NO</th>
+            <th>EMPLOYEE NAMES</th>
+            <th>LEAVE TYPE NAME</th>
+            <th>STARTING DATE OF LEAVE</th>
+            <th>ENDING DATE OF LEAVE</th>
           </tr>
         </thead>
         <tbody className="tableLeave">
           {data.map((dataItem) => (
             <tr key={dataItem.id}>
-              <td>{dataItem.id}</td>
-              <td>{dataItem.names}</td>
+              <td>{dataItem.lea_det_id}</td>
+              <td>{dataItem.selectedEmployee}</td>
               <td>{dataItem.selectleavetype}</td>
               <td>{dataItem.startDate}</td>
               <td>{dataItem.endDate}</td>
