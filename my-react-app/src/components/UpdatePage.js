@@ -39,6 +39,7 @@ function UpdatePage() {
         names,
         Experiences,
         dojs,
+        id,
       });
       navigate1("/");
       console.log("Data updated successfully");
@@ -48,35 +49,71 @@ function UpdatePage() {
   };
 
   return (
-    <div>
-      {/* update form */}
-      <input
-        type="text"
-        placeholder="Enetr Name"
-        value={names}
-        onChange={(event) => setnames(event.target.value)}
-      ></input>
+    <div className="rinnercontainer">
+      <br></br>
       <br></br>
 
-      <input
-        type="text"
-        placeholder="Experience in years"
-        value={Experiences}
-        onChange={(event) => setExperiences(event.target.value)}
-      ></input>
-      <br></br>
-      <input
-        type="date"
-        className="date"
-        placeholder="Enter the Date of Joining"
-        value={dojs}
-        onChange={(event) => setDoJs(event.target.value)}
-      ></input>
-      <br></br>
-      <br></br>
-      <button type="button" onClick={handleUpdate} className="updatebutton1">
-        Update
-      </button>
+      <ul class="nav flex-row">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/read">
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leave">
+            Leave Type
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/range">
+            Leave form
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leaveDetails">
+            Leave Details
+          </a>
+        </li>
+      </ul>
+
+      <div className="updateform">
+        {/* update form */}
+
+        <input
+          type="text"
+          placeholder="Enter ID"
+          value={id}
+          // onChange={(event) => setId(event.target.value)}
+        ></input>
+        <br></br>
+        <input
+          type="text"
+          placeholder="Enetr Name"
+          value={names}
+          onChange={(event) => setnames(event.target.value)}
+        ></input>
+        <br></br>
+
+        <input
+          type="text"
+          placeholder="Experience in years"
+          value={Experiences}
+          onChange={(event) => setExperiences(event.target.value)}
+        ></input>
+        <br></br>
+        <input
+          type="date"
+          className="date"
+          placeholder="Enter the Date of Joining"
+          value={dojs}
+          onChange={(event) => setDoJs(event.target.value)}
+        ></input>
+        <br></br>
+        <br></br>
+        <button type="button" onClick={handleUpdate} className="updatebutton1">
+          Update
+        </button>
+      </div>
     </div>
   );
 }

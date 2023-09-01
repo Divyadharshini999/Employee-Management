@@ -22,7 +22,7 @@ function SigninPage() {
       .catch((error) => {
         console.error("Signin error:", error);
         if (error.response && error.response.status === 401) {
-          setErrorMessage("Incoorect email or Password . Please try again");
+          setErrorMessage("Incorrect email or Password . Please try again");
         } else {
           setErrorMessage(
             "An error occurred during sign-in.Please try again later."

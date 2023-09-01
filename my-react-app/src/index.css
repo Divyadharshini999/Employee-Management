@@ -51,27 +51,28 @@ label{
   width: 200px;
   display: block; 
   margin: 0 px;
-/* width: 187px; */
+
 } 
 a.createlink {
   background-color:   #9ca0a7;
-  /* margin-left:-500px; */
   margin-bottom: 0px;
   color:black;
-  /* padding-bottom: 100px; */
-  /* text-underline-offset: none; */
   padding: 10px;
   text-decoration-line: none;
   
  
 }
 .container-fluid{
-  margin-right: -100px;
+  margin-right: -5px;
 }
 .links{
   margin-left: 10px;
   color: white;
   text-decoration: none
+}
+.links:hover{
+  
+  color: black;
 }
 a.createlink:hover{
   color:rgb(170, 73, 73);
@@ -125,7 +126,7 @@ input[type=text]
   
 }
  .updatebutton{
-  /* background-color:  rgb(41, 38, 39); */
+  
   border: 1px solid white;
   background-color: #198754 ;
   border-radius: 10px;
@@ -134,7 +135,7 @@ input[type=text]
   color: white;
   text-decoration: none;
    height: 0px; 
-  /* margin-left: -220px; */
+  
 }
 .updatebutton1{
   border: 1px solid white;
@@ -143,7 +144,7 @@ input[type=text]
   padding: 5px;
   width: 100px;
   color: white;
-  margin-left: -600px;
+  margin-left: -550px;
 }
 .updatebutton1:hover{
   background-color: #24721d;
@@ -190,12 +191,12 @@ code {
   
 }
 .readpage{
-  /* margin-top: -500px; */
+  
   margin-left: 20px;
   color: black;
 }
 .readpage1{
-  /* margin-top: -500px; */
+  
   margin-top: 50px;
   margin-left: 250px;
   color: black;
@@ -215,7 +216,7 @@ code {
 .nav-link{
   color: white;
  font-size: x-large;
- /* width: 120%; */
+ 
   
   
 }
@@ -225,14 +226,19 @@ code {
   margin:0px;
   width: 120%;
   height: 100px;
+  
 }
 .nav   {
   background-color: #0d6efd;
   color: white;
  
+ 
 }
 ul.nav{
   margin: -50px;
+  justify-content: center;
+  
+  
  
 }
 .inputContainer{
@@ -284,6 +290,9 @@ ul.nav{
   padding: 5px;
   border-radius: 5px;
 }
+.addleave:hover{
+  background-color: #07234d;
+}
 .leaverangeform{
   color: black;
   margin-top: 100px;
@@ -326,4 +335,8 @@ ul.nav{
 }
 .error-message{
   color: red;
+}
+.updateform{
+  margin-top: 100px;
+  margin-left: 550px;
 }

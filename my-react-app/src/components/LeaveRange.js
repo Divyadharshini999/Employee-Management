@@ -88,7 +88,7 @@ function LeaveRange() {
 
       <ul class="nav flex-row">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">
+          <a class="nav-link active" aria-current="page" href="/read">
             Home
           </a>
         </li>
