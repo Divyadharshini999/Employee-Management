@@ -30,37 +30,67 @@ function EmployeeLeaveDetails() {
   }, []);
 
   return (
-    <div className="readpage">
-      <br></br>
-      <br></br>
-      <Link to="/range" className="createlink">
-        LEAVE FORM
-      </Link>
+    <div className="rinnercontainer">
       <br></br>
       <br></br>
 
-      <table className="tableLeave" cellPadding={10}>
-        <thead>
-          <tr>
-            <th>SI.NO</th>
-            <th>EMPLOYEE NAMES</th>
-            <th>LEAVE TYPE NAME</th>
-            <th>STARTING DATE OF LEAVE</th>
-            <th>ENDING DATE OF LEAVE</th>
-          </tr>
-        </thead>
-        <tbody className="tableLeave">
-          {data.map((dataItem) => (
-            <tr key={dataItem.id}>
-              <td>{dataItem.lea_det_id}</td>
-              <td>{dataItem.selectedEmployee}</td>
-              <td>{dataItem.selectleavetype}</td>
-              <td>{dataItem.startDate}</td>
-              <td>{dataItem.endDate}</td>
+      <ul class="nav flex-row">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leave">
+            Leave Type
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/range">
+            Leave form
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leaveDetails">
+            Leave Details
+          </a>
+        </li>
+      </ul>
+
+      <div className="readpage1">
+        <br></br>
+        <br></br>
+        <Link to="/range" className="leavecreatelink">
+          LEAVE FORM
+        </Link>
+        <br></br>
+        <br></br>
+
+        <table className="tableLeave" cellPadding={10}>
+          <thead>
+            <tr>
+              <th>SI.NO</th>
+              <th>EMPLOYEE NAMES</th>
+              <th>LEAVE TYPE NAME</th>
+              <th>STARTING DATE OF LEAVE</th>
+              <th>ENDING DATE OF LEAVE</th>
+              <th>leave id</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="tableLeave">
+            {data.map((dataItem) => (
+              <tr key={dataItem.id}>
+                <td>{dataItem.lea_det_id}</td>
+                <td>{dataItem.selectedEmployee}</td>
+                <td>{dataItem.selectleavetype}</td>
+                <td>{dataItem.startDate}</td>
+                <td>{dataItem.endDate}</td>
+                <td>{dataItem.leave_id}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

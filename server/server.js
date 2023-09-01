@@ -226,6 +226,56 @@ app.post("/api/leavedetailstables", (req, res) => {
   });
 });
 
+//signup
+app.post("/api/signup", (req, res) => {
+  const { s_no, newadmin, email, password } = req.body;
+  const insertQuery =
+    "INSERT INTO signup (s_no,newadmin,email,password) VALUES (?,?,?,?)";
+  if (!newadmin || !email || !password) {
+    return res.status(400).json({ message: "Datas are not Inserted" });
+  }
+  db.query(insertQuery, [s_no, newadmin, email, password], (err, result) => {
+    if (err) {
+      console.error("Error adding Admin", err);
+      return res.status(500).json({ message: "Error adding Admin " });
+    }
+    res.status(201).json({ message: "Adim added successfully" });
+  });
+});
+
+app.post("/api/signin", (req, res) => {
+  const { email, password } = req.body;
+
+  // Debugging: Log the received email and password
+  console.log("Received email:", email);
+  console.log("Received password:", password);
+
+  // Add code to check user credentials in the database
+  const query = `SELECT s_no, email FROM signup WHERE email = ? AND password = ?`;
+
+  db.query(query, [email, password], (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      res.status(500).json({ message: "Database error" });
+      return;
+    }
+
+    console.log("Query result:", result);
+
+    if (result.length === 1) {
+      // User credentials are correct
+      const user = result[0];
+      res
+        .status(200)
+        .json({ message: "Authentication successful", userId: user.s_no });
+    } else {
+      // User credentials are incorrect
+      console.log("Authentication failed for email:", email);
+      res.status(401).json({ message: "Authentication failed" });
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });

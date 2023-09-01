@@ -40,39 +40,67 @@ function LeavePage() {
   }, []);
 
   return (
-    <div className="containerLeaveForm">
-      <h1>Add Leave</h1>
-
-      <input
-        type="text"
-        placeholder="Leave Type Name"
-        value={leavetypeNames}
-        onChange={(e) => setLeaveTypeName(e.target.value)}
-      />
+    <div className="rinnercontainer">
       <br></br>
-      <button className="addleave" onClick={addLeave}>
-        Add Leave
-      </button>
-      <br></br>
-      <h5 className="h5">{message}</h5>
       <br></br>
 
-      <table className="tableLeave" cellPadding={10}>
-        <thead>
-          <tr>
-            {/* <th>Leave ID</th> */}
-            <th>Leave Type Name</th>
-          </tr>
-        </thead>
-        <tbody className="tableLeave">
-          {leaveData.map((leaveData) => (
-            <tr key={leaveData.leave_id}>
-              {/* <td>{leaveData.leave_id}</td> */}
-              <td>{leaveData.leavetypeNames}</td>
+      <ul class="nav flex-row">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leave">
+            Leave Type
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/range">
+            Leave form
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leaveDetails">
+            Leave Details
+          </a>
+        </li>
+      </ul>
+
+      <div className="containerLeaveForm">
+        {/* <h5>Add Leave</h5> */}
+
+        <input
+          type="text"
+          placeholder="Leave Type Name"
+          value={leavetypeNames}
+          onChange={(e) => setLeaveTypeName(e.target.value)}
+        />
+        <br></br>
+        <button className="addleave" onClick={addLeave}>
+          Add Leave
+        </button>
+        <br></br>
+        <h5 className="h5">{message}</h5>
+        <br></br>
+
+        <table className="tableLeave" cellPadding={10}>
+          <thead>
+            <tr>
+              {/* <th>Leave ID</th> */}
+              <th>Leave Type Name</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="tableLeave">
+            {leaveData.map((leaveData) => (
+              <tr key={leaveData.leave_id}>
+                {/* <td>{leaveData.leave_id}</td> */}
+                <td>{leaveData.leavetypeNames}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

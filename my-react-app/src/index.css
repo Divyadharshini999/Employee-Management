@@ -1,10 +1,12 @@
 body{
   margin: 0;
+  padding: 0;
 }
 
 .addinput {
-  margin-top: -600px;
-  margin-left: 300px;
+  margin-top: 00px;
+  margin-left: 00px;
+  width: 115.5%;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -22,15 +24,15 @@ body{
 
 } */
  .container {
-/* margin-top: 70px; */
+ margin-top: 0px; 
 margin: -15px;
 text-align: center;
-color: white;
+color: black;
 
 }
 .inputContainer {
+ margin-left: 300px;
  
- border: 1px solid black; 
 }
  .tableContainer {
   margin-top: 10px;
@@ -44,9 +46,7 @@ label{
   margin-right: 400px;
 }
  .date{
-  /* margin-left: -328px;
-  margin-top: -10px;
-  padding: 7px; */
+  
   height: 2em;
   width: 200px;
   display: block; 
@@ -54,10 +54,10 @@ label{
 /* width: 187px; */
 } 
 a.createlink {
-  background-color:   #0d6efd;
-  margin-left:-500px;
+  background-color:   #9ca0a7;
+  /* margin-left:-500px; */
   margin-bottom: 0px;
-  color: white;
+  color:black;
   /* padding-bottom: 100px; */
   /* text-underline-offset: none; */
   padding: 10px;
@@ -65,9 +65,26 @@ a.createlink {
   
  
 }
+.container-fluid{
+  margin-right: -100px;
+}
+.links{
+  margin-left: 10px;
+  color: white;
+  text-decoration: none
+}
 a.createlink:hover{
-  color:white;
+  color:rgb(170, 73, 73);
   background-color:rgb(23, 40, 88);
+}
+.newcreatelink{
+  background-color:#0d6efd;
+  color: white;
+  text-decoration: none;
+  padding: 10px
+}
+.newcreatelink:hover{
+  background-color: #07234d;
 }
 .error{
   color: red;
@@ -86,16 +103,7 @@ a.createlink:hover{
   margin-top: -10px;
   background-color: rgb(148, 142, 142);
 }
-.innercontainer{
-  margin-top: -18px;
-  /* background-color: rgb(223, 193, 200); */
-  /* background-color:rgb(139, 139, 137); */
-  background-color: rgb(148, 142, 142);
-  width: 200px;
-  height: 100vh;
-  color: white;
-  
-}
+
 input[type=text]
 {
   height: 2em;
@@ -106,6 +114,15 @@ input[type=text]
 .lableinput{
   display:flex;
 
+}
+.createaddbutton{
+  background-color: #0d6efd;
+  border: 1px solid white;
+  padding-left: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-left: -200px;
+  
 }
  .updatebutton{
   /* background-color:  rgb(41, 38, 39); */
@@ -148,7 +165,7 @@ input[type=text]
   width: 100px;
   color: white;
   border: 1px solid white;
-  /* margin-left: -310px; */
+   margin-left: -180px; 
 }
 .addbutton:hover{
   background-color: #07234d;
@@ -168,14 +185,37 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.createform{
+  margin-top: 100px;
+  
+}
 .readpage{
-  margin-top: -500px;
+  /* margin-top: -500px; */
   margin-left: 20px;
   color: black;
+}
+.readpage1{
+  /* margin-top: -500px; */
+  margin-top: 50px;
+  margin-left: 250px;
+  color: black;
+}
+.leavecreatelink{
+  margin-right:200px;
+  background-color: #0d6efd;
+  color: white;
+  text-decoration: none;padding: 10px;
+}
+.leavecreatelink:hover{
+  background-color: #07234d;
+}
+.readtables{
+  margin-left: 350px;
 }
 .nav-link{
   color: white;
  font-size: x-large;
+ /* width: 120%; */
   
   
 }
@@ -183,14 +223,20 @@ code {
 .navbar{
   color: white;
   margin:0px;
-  width: 121%;
+  width: 120%;
   height: 100px;
 }
 .nav   {
+  background-color: #0d6efd;
   color: white;
+ 
+}
+ul.nav{
+  margin: -50px;
+ 
 }
 .inputContainer{
-  border: 1px solid white;
+  
   transition: all;
   transform-box: content-box;
   padding: 0px 250px;
@@ -213,6 +259,7 @@ code {
  display: flex;
  flex-direction: column;
  align-items: center;
+ margin-top: 100px;
 
  
  
@@ -239,6 +286,7 @@ code {
 }
 .leaverangeform{
   color: black;
+  margin-top: 100px;
 }
 .optionnames{
   color: black;
@@ -248,6 +296,34 @@ code {
   display: block;
 }
 .innercontainerOfDiv{
+  padding: 50px 10px;
+  gap: 5px;
+  margin-left: 400px;
+  margin-right: 450px;
+  border: 1px solid silver;
+  box-shadow:0px 0px 30px rgba(0,0,0,0.5);
+}
+.leaverangeformin{
+  margin-right: -110px;
+  margin-left: 140px;
+  margin-top: 100px
+
+}
+.innercontainerOfDivup{
+  padding: 50px 10px;
+  gap: 5px;
+  margin-left: 500px;
+  margin-right: 500px;
+  border: 1px solid silver;
+  box-shadow:0px 0px 30px rgba(0,0,0,0.5);
+  
+  
+}
+.innercontainerOfDivrange{
   padding: 10px;
   gap: 5px;
+  margin-left: 50px;
+}
+.error-message{
+  color: red;
 }

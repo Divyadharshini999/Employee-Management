@@ -38,59 +38,93 @@ function CreatePage() {
   const navigate1 = useNavigate();
 
   return (
-    <form
-      className="inputContainer  form-control-sm  "
-      onSubmit={handleSubmit(async () => {
-        //console.log(data);
-        await axios.post(API_URL, {
-          names,
-          Experiences,
-          dojs,
-        });
-        navigate1("/");
-      })}
-    >
-      {/* for changing or to type something in the textbox, wehave to use "onChange" event function */}
-
-      <input
-        class="form-control form-control-sm "
-        {...register("names")}
-        type="text"
-        placeholder="Enetr Name"
-        value={names}
-        onChange={(event) => setnames(event.target.value)}
-      ></input>
-
-      <div className="error">{errors.names?.message} </div>
-      <br></br>
-
-      <input
-        class="form-control form-control-sm"
-        {...register("Experiences")}
-        type="text"
-        placeholder="Experience in years"
-        value={Experiences}
-        onChange={(event) => setExperiences(event.target.value)}
-      ></input>
-      <div className="error">{errors.Experiences?.message} </div>
-      <br></br>
-
-      <input
-        class="form-control form-control-md"
-        {...register("dojs")}
-        type="date"
-        className="date"
-        placeholder="Enter the Date of Joining"
-        value={dojs}
-        onChange={(event) => setDoJs(event.target.value)}
-      ></input>
-      <div className="error">{errors.dojs?.message} </div>
+    <div className="rinnercontainer">
       <br></br>
       <br></br>
-      <button type="submit" className="addbutton" onClick={handleSubmit}>
-        ADD
-      </button>
-    </form>
+
+      <ul class="nav flex-row">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leave">
+            Leave Type
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/range">
+            Leave form
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leaveDetails">
+            Leave Details
+          </a>
+        </li>
+      </ul>
+      <br></br>
+
+      <form
+        className="inputContainer  form-control-sm  "
+        onSubmit={handleSubmit(async () => {
+          //console.log(data);
+          await axios.post(API_URL, {
+            names,
+            Experiences,
+            dojs,
+          });
+          navigate1("/");
+        })}
+      >
+        {/* for changing or to type something in the textbox, wehave to use "onChange" event function */}
+        <div className="createform">
+          <input
+            class="form-control form-control-sm "
+            {...register("names")}
+            type="text"
+            placeholder="Enetr Name"
+            value={names}
+            onChange={(event) => setnames(event.target.value)}
+          ></input>
+
+          <div className="error">{errors.names?.message} </div>
+          <br></br>
+
+          <input
+            class="form-control form-control-sm"
+            {...register("Experiences")}
+            type="text"
+            placeholder="Experience in years"
+            value={Experiences}
+            onChange={(event) => setExperiences(event.target.value)}
+          ></input>
+          <div className="error">{errors.Experiences?.message} </div>
+          <br></br>
+
+          <input
+            class="form-control form-control-md"
+            {...register("dojs")}
+            type="date"
+            className="date"
+            placeholder="Enter the Date of Joining"
+            value={dojs}
+            onChange={(event) => setDoJs(event.target.value)}
+          ></input>
+          <div className="error">{errors.dojs?.message} </div>
+          <br></br>
+          <br></br>
+          <button
+            type="submit"
+            className="createaddbutton"
+            onClick={handleSubmit}
+          >
+            ADD
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
 export default CreatePage;

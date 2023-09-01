@@ -42,13 +42,19 @@ function LeaveRange() {
     const selectedEmployeeObject = names.find(
       (employee) => employee.names === selectedEmployee
     );
+    const selectleavetypeObject = leavetypeNames.find(
+      (leave) => leave.leavetypeNames === selectleavetype
+    );
 
-    if (selectedEmployeeObject) {
+    if (selectedEmployeeObject && selectleavetypeObject) {
       const selectedEmployeeId = selectedEmployeeObject.id;
+
+      const selectleavetypeId = selectleavetypeObject.leave_id;
 
       // Create a new leave object
       const newLeave = {
         id: selectedEmployeeId,
+        leave_id: selectleavetypeId,
         names: selectedEmployee,
         selectleavetype: selectleavetype,
         startDate: startDate,
@@ -56,7 +62,10 @@ function LeaveRange() {
       };
       console.log("Data to be sent to theserver", newLeave);
       try {
-        await axios.post("http://localhost:5000/api/leavedetails", newLeave);
+        await axios.post(
+          "http://localhost:5000/api/leavedetailstables",
+          newLeave
+        );
 
         setLeaveData([...leaveData, newLeave]);
         setSelectedEmployee("");
@@ -73,70 +82,98 @@ function LeaveRange() {
   };
 
   return (
-    <form className="leaverangeform">
-      <div className="innercontainerOfDiv">
-        Select Employee Name
-        <select
-          style={{ color: "black" }}
-          value={selectedEmployee}
-          onChange={(e) => setSelectedEmployee(e.target.value)}
-        >
-          <option className="optionnames" value="">
-            Employee Name
-          </option>
-          {names.map((nameOption) => (
-            <option
-              style={{ color: "black" }}
-              key={nameOption.id}
-              value={nameOption.names}
-              className="optionnames"
-            >
-              {nameOption.names}
-            </option>
-          ))}
-        </select>
-      </div>
+    <div className="rinnercontainer">
       <br></br>
-      <div className="innercontainerOfDiv">
-        Select Leave Type
-        <select
-          value={selectleavetype}
-          onChange={(e) => setSelectLeavetype(e.target.value)}
-        >
-          <option value="">Leave Type </option>
-          {leavetypeNames.map((leaveOption) => (
-            <option key={leaveOption.id} value={leaveOption.id}>
-              {leaveOption.leavetypeNames}
-            </option>
-          ))}
-        </select>
-      </div>
-      <br></br>
-      <div className="innercontainerOfDiv">
-        Select Starting Date Of Leave
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        ></input>
-        <br></br>
-      </div>
-      <br></br>
-      <div className="innercontainerOfDiv">
-        Select Endind Date Of Leave
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        ></input>
-        <br></br>
-      </div>
       <br></br>
 
-      <button type="submit" className="addleave" onClick={handleSubmit}>
-        submit
-      </button>
-    </form>
+      <ul class="nav flex-row">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leave">
+            Leave Type
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/range">
+            Leave form
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leaveDetails">
+            Leave Details
+          </a>
+        </li>
+      </ul>
+
+      <form className="leaverangeform">
+        <div className="innercontainerOfDivrange">
+          Select Employee Name
+          <select
+            style={{ color: "black" }}
+            value={selectedEmployee}
+            onChange={(e) => setSelectedEmployee(e.target.value)}
+          >
+            <option className="optionnames" value="">
+              Employee Name
+            </option>
+            {names.map((nameOption) => (
+              <option
+                style={{ color: "black" }}
+                key={nameOption.id}
+                value={nameOption.names}
+                className="optionnames"
+              >
+                {nameOption.names}
+              </option>
+            ))}
+          </select>
+        </div>
+        <br></br>
+        <div className="innercontainerOfDivrange">
+          Select Leave Type
+          <select
+            value={selectleavetype}
+            onChange={(e) => setSelectLeavetype(e.target.value)}
+          >
+            <option value="">Leave Type </option>
+            {leavetypeNames.map((leaveOption) => (
+              <option key={leaveOption.id} value={leaveOption.id}>
+                {leaveOption.leavetypeNames}
+              </option>
+            ))}
+          </select>
+        </div>
+        <br></br>
+        <div className="innercontainerOfDivrange">
+          Select Starting Date Of Leave
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          ></input>
+          <br></br>
+        </div>
+        <br></br>
+        <div className="innercontainerOfDivrange">
+          Select Endind Date Of Leave
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          ></input>
+          <br></br>
+        </div>
+        <br></br>
+
+        <button type="submit" className="addleave" onClick={handleSubmit}>
+          submit
+        </button>
+      </form>
+    </div>
   );
 }
 
