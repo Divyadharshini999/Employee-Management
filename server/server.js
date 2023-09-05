@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const port = 5000;
 const mysql = require("mysql2");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 //const { Connection } = require("mysql2/typings/mysql/lib/Connection");
 
 let data = [
@@ -228,50 +230,55 @@ app.post("/api/leavedetailstables", (req, res) => {
 
 //signup
 app.post("/api/signup", (req, res) => {
-  const { s_no, newadmin, email, password } = req.body;
-  const insertQuery =
-    "INSERT INTO signup (s_no,newadmin,email,password) VALUES (?,?,?,?)";
-  if (!newadmin || !email || !password) {
-    return res.status(400).json({ message: "Datas are not Inserted" });
-  }
-  db.query(insertQuery, [s_no, newadmin, email, password], (err, result) => {
+  const { newadmin, email, password } = req.body;
+
+  // Hash the password
+  bcrypt.hash(password, saltRounds, (err, hash) => {
     if (err) {
-      console.error("Error adding Admin", err);
-      return res.status(500).json({ message: "Error adding Admin " });
+      console.error("Error hashing password:", err);
+      res.status(500).json({ message: "Error hashing password" });
+    } else {
+      // Store the hashed password in database
+      const insertQuery =
+        "INSERT INTO signup (newadmin,email, password) VALUES (?,?, ?)";
+      db.query(insertQuery, [newadmin, email, hash], (err, result) => {
+        if (err) {
+          console.error("Error inserting user:", err);
+          res.status(500).json({ message: "Error inserting user" });
+        } else {
+          res.status(201).json({ message: "User registered successfully" });
+        }
+      });
     }
-    res.status(201).json({ message: "Adim added successfully" });
   });
 });
 
+//signin
 app.post("/api/signin", (req, res) => {
   const { email, password } = req.body;
 
-  // Debugging: Log the received email and password
-  console.log("Received email:", email);
-  console.log("Received password:", password);
-
-  // Add code to check user credentials in the database
-  const query = `SELECT s_no, email FROM signup WHERE email = ? AND password = ?`;
-
-  db.query(query, [email, password], (err, result) => {
+  const selectQuery = "SELECT * FROM signup WHERE email = ?";
+  db.query(selectQuery, [email], (err, result) => {
     if (err) {
-      console.error("Database error:", err);
-      res.status(500).json({ message: "Database error" });
-      return;
-    }
-
-    console.log("Query result:", result);
-
-    if (result.length === 1) {
-      // User credentials are correct
-      const user = result[0];
-      res
-        .status(200)
-        .json({ message: "Authentication successful", userId: user.s_no });
+      console.error("Error fetching user:", err);
+      res.status(500).json({ message: "Error fetching user" });
+    } else if (result.length === 0) {
+      res.status(401).json({ message: "User not found" });
     } else {
-      // User credentials are incorrect
-      console.log("Authentication failed for email:", email);
-      res.status(401).json({ message: "Authentication failed" });
+      const storedHash = result[0].password;
+
+      bcrypt.compare(password, storedHash, (err, match) => {
+        if (err) {
+          console.error("Error comparing passwords:", err);
+          res.status(500).json({ message: "Error comparing passwords" });
+        } else if (match) {
+          res.status(200).json({ message: "Sign-in successful" });
+          console.log("correct email and password", result);
+        } else {
+          res.status(401).json({ message: "Invalid credentials" });
+          console.error("Password or email not match");
+        }
+      });
     }
   });
 });
