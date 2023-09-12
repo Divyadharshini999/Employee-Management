@@ -41,7 +41,7 @@ function UpdatePage() {
         dojs,
         id,
       });
-      navigate1("/");
+      navigate1("/newprofile/:id");
       console.log("Data updated successfully");
     } catch (error) {
       console.error(error);
@@ -55,23 +55,14 @@ function UpdatePage() {
 
       <ul class="nav flex-row">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/read">
-            Home
+          <a class="nav-link active" aria-current="page" href="#">
+            Welcome to React
           </a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leave">
-            Leave Type
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/range">
+          <a class="nav-link active" aria-current="page" href="/rangeemployee">
             Leave form
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leaveDetails">
-            Leave Details
           </a>
         </li>
       </ul>

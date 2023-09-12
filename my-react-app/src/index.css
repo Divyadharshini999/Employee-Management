@@ -321,6 +321,7 @@ ul.nav{
 .innercontainerOfDivup{
   padding: 50px 10px;
   gap: 5px;
+  margin-top: 40px;
   margin-left: 500px;
   margin-right: 500px;
   border: 1px solid silver;
@@ -339,4 +340,9 @@ ul.nav{
 .updateform{
   margin-top: 100px;
   margin-left: 550px;
+}
+.profiletable{
+  padding: 50px 50px;
+  margin-left: 480px;
+  margin-top: 100px;
 }

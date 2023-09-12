@@ -1,3 +1,5 @@
+//server.js
+
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
@@ -6,6 +8,8 @@ const port = 5000;
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 //const { Connection } = require("mysql2/typings/mysql/lib/Connection");
 
 let data = [
@@ -34,6 +38,15 @@ db.connect((err) => {
   console.log("connected to mysql");
 });
 
+// Middleware to check if the user is an admin
+const isAdmin = (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    return next(); // User is an admin, allow access
+  } else {
+    return res.status(403).json({ message: "Access denied" });
+  }
+};
+
 // Get all data
 app.get("/api/emplyee_management", (req, res) => {
   const selectQuery = "SELECT * FROM emplyee_management ";
@@ -50,25 +63,30 @@ app.get("/api/emplyee_management", (req, res) => {
 // API route to fetch data by ID
 app.get("/api/emplyee_management/:id", (req, res) => {
   const id = req.params.id;
-  const selectQuery = `SELECT names, Experiences,dojs FROM emplyee_management WHERE id = ?`;
+  const selectQuery = `SELECT names, Experiences,dojs,email FROM emplyee_management WHERE id = ?`;
 
   db.query(selectQuery, [id], (err, result) => {
     if (err) {
       console.error("Error fetching data:", err);
       res.status(500).json({ message: "Data fetch failed" });
+    } else if (result.length === 0) {
+      res.status(404).json({ message: "employee not found" });
     } else {
       res.json({
+        id: result[0].id,
         names: result[0].names,
         Experiences: result[0].Experiences,
         dojs: result[0].dojs,
+        // role: result[0].role,
+        email: result[0].email,
       });
     }
   });
 });
 
 //create new data
-app.post("/api/emplyee_management", (req, res) => {
-  const { names, Experiences, dojs } = req.body;
+app.post("/api/emplyee_management", isAdmin, (req, res) => {
+  const { names, Experiences, dojs, email } = req.body;
   const insertQuery = "INSERT INTO emplyee_management SET ?";
   if (!names) {
     return res.status(400).json({ message: "Name is required" });
@@ -79,8 +97,11 @@ app.post("/api/emplyee_management", (req, res) => {
   if (!dojs) {
     return res.status(400).json({ message: "Date Of Joining is required" });
   }
+  if (!email) {
+    return res.status(400).json({ message: "email is required" });
+  }
 
-  const newItem = { names, Experiences, dojs };
+  const newItem = { names, Experiences, dojs, email };
 
   db.query(insertQuery, newItem, (err, result) => {
     if (err) {
@@ -230,7 +251,7 @@ app.post("/api/leavedetailstables", (req, res) => {
 
 //signup
 app.post("/api/signup", (req, res) => {
-  const { newadmin, email, password } = req.body;
+  const { usernames, email, password, role, id } = req.body;
 
   // Hash the password
   bcrypt.hash(password, saltRounds, (err, hash) => {
@@ -240,15 +261,38 @@ app.post("/api/signup", (req, res) => {
     } else {
       // Store the hashed password in database
       const insertQuery =
-        "INSERT INTO signup (newadmin,email, password) VALUES (?,?, ?)";
-      db.query(insertQuery, [newadmin, email, hash], (err, result) => {
-        if (err) {
-          console.error("Error inserting user:", err);
-          res.status(500).json({ message: "Error inserting user" });
-        } else {
-          res.status(201).json({ message: "User registered successfully" });
+        "INSERT INTO signup (usernames,email, password,role,id) VALUES (?,?, ?,?,?)";
+      db.query(
+        insertQuery,
+        [usernames, email, hash, role, id],
+        (err, result) => {
+          if (err) {
+            console.error("Error inserting user:", err);
+            res.status(500).json({ message: "Error inserting user" });
+          } else {
+            res.status(201).json({ message: "User registered successfully" });
+          }
         }
-      });
+      );
+    }
+  });
+});
+
+// Get all data
+app.get("/api/signup", (req, res) => {
+  //const email = req.params.email;
+  const selectQuery = "SELECT * FROM signup  ";
+
+  db.query(selectQuery, (err, data) => {
+    if (err) {
+      console.error("Error fetching user details:", err);
+      res.status(500).send({ message: "Error fetching user details" });
+      return;
+    }
+    if (data.length === 0) {
+      res.status(404).json({ message: "User not found" });
+    } else {
+      res.json(data);
     }
   });
 });
@@ -272,7 +316,9 @@ app.post("/api/signin", (req, res) => {
           console.error("Error comparing passwords:", err);
           res.status(500).json({ message: "Error comparing passwords" });
         } else if (match) {
-          res.status(200).json({ message: "Sign-in successful" });
+          res
+            .status(200)
+            .json({ message: "Sign-in successful", role: result[0].role });
           console.log("correct email and password", result);
         } else {
           res.status(401).json({ message: "Invalid credentials" });
@@ -280,6 +326,73 @@ app.post("/api/signin", (req, res) => {
         }
       });
     }
+  });
+});
+
+app.get("/api/emplyee_managements/:id", (req, res) => {
+  const id = req.params.id;
+  const selectQuery = `
+  SELECT em.id, em.names, em.Experiences, em.dojs, s.email, s.role FROM emplyee_management em LEFT JOIN signup s ON em.id = s.id WHERE em.id = ?
+  `;
+
+  db.query(selectQuery, [id], (err, result) => {
+    if (err) {
+      console.error("Error fetching employee data:", err);
+      res.status(500).json({ message: "Error fetching employee data" });
+    } else if (result.length === 0) {
+      res.status(401).json({ message: "Employee data not found" });
+    } else {
+      const user = result[0];
+      if (user.names) {
+        res.json(user);
+      } else {
+        res.status(500).json({ message: "Invalid employee data" });
+      }
+    }
+  });
+});
+
+app.post("/api/profile", (req, res) => {
+  const { id, email } = req.body;
+  const insertQuery = "INSERT INTO profile SET ?";
+  if (!id || !email) {
+    return res.status(400).json({ message: "Both id and email are required" });
+  }
+
+  const newItem = { id, email };
+
+  db.query(insertQuery, newItem, (err, result) => {
+    if (err) {
+      console.error("Error adding profile:", err);
+      return res.status(500).json({ message: "Error adding profile" });
+    }
+    newItem.id = result.insertId;
+    res.status(201).json(newItem);
+  });
+});
+
+// API route to fetch profile data by ID from both tables
+app.get("/api/profile", (req, res) => {
+  const id = req.query.id;
+
+  const selectQuery = `
+    SELECT em.id, em.names, em.Experiences, em.dojs, p.email
+    FROM emplyee_management em
+    LEFT JOIN profile p ON em.id = p.id
+    WHERE em.id = ?
+  `;
+
+  db.query(selectQuery, [id], (err, result) => {
+    if (err) {
+      console.error("Error fetching profile data:", err);
+      res.status(500).json({ message: "Data fetch failed" });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    res.json(result[0]);
   });
 });
 
