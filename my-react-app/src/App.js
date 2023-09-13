@@ -11,13 +11,14 @@ import LeaveRange from "./components/LeaveRange";
 import EmployeeLeaveDetails from "./components/EmployeeLeaveDetails";
 import SignUpPage from "./components/SignUpPage";
 import SigninPage from "./components/SigninPage";
-//import AdminPage from "./components/AdminPage";
+import AdminPage from "./components/AdminPage";
 import EmployeePage from "./components/EmployeePage";
 //import Profile from "./components/Profile";
 //import NewProfile from "./components/NewProfile";
 import LeaveFormEmployee from "./components/LeaveFormEmployee";
 import EmployeePages from "./components/EmployeePages";
 import VisitProfile from "./components/VisitProfile";
+import UpdatePageAdmin from "./components/UpdatePageAdmin";
 
 function ProtectedRoute({ role, children }) {
   // Check the user's role and render the component or redirect accordingly
@@ -30,11 +31,13 @@ function ProtectedRoute({ role, children }) {
 
 function App() {
   const user = {
-    role: "employee",
+    // Simulated user data with role
+    role: "employee", // Change this based on the actual user's role
   };
 
   return (
     <div className="container">
+      {/* ... your navigation */}
       <div className="addinput">
         <Routes>
           <Route path="/" element={<SignUpPage />} />
@@ -42,6 +45,7 @@ function App() {
           <Route path="/employeepages" element={<EmployeePages />} />
           <Route path="/visitprofile/:id" element={<VisitProfile />} />
           <Route path="/rangeemployee" element={<LeaveFormEmployee />} />
+          <Route path="/updatebyadmin/:id" element={<UpdatePageAdmin />} />
           <Route
             path="/create"
             element={

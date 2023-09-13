@@ -107,7 +107,10 @@ function ReadPage() {
                 {/* <button className="updatebutton" onClick={() => updateUser(data)}>
                 UPDATE
               </button> */}
-                <Link to={`/update/${data.id} `} className="updatebutton">
+                <Link
+                  to={`/updatebyadmin/${data.id} `}
+                  className="updatebutton"
+                >
                   UPDATE
                 </Link>
               </td>
