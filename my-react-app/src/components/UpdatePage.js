@@ -7,6 +7,7 @@ function UpdatePage() {
   const [names, setnames] = useState("");
   const [Experiences, setExperiences] = useState("");
   const [dojs, setDoJs] = useState("");
+  const [data, setdata] = useState();
   //const [id, setId] = useState("");
   const { id } = useParams();
 
@@ -41,7 +42,7 @@ function UpdatePage() {
         dojs,
         id,
       });
-      navigate1("/newprofile/:id");
+      navigate1(`/visitprofile/${id} `);
       console.log("Data updated successfully");
     } catch (error) {
       console.error(error);
@@ -59,12 +60,21 @@ function UpdatePage() {
             Welcome to React
           </a>
         </li>
-
+        {/* <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leave">
+            Leave Type
+          </a>
+        </li> */}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/rangeemployee">
             Leave form
           </a>
         </li>
+        {/* <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/leaveDetails">
+            Leave Details
+          </a>
+        </li> */}
       </ul>
 
       <div className="updateform">

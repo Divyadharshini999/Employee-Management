@@ -14,6 +14,7 @@ function LeaveFormEmployee() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [leaveData, setLeaveData] = useState([]);
+  const [data, setdata] = useState();
   const { id } = useParams();
 
   useEffect(() => {
@@ -64,7 +65,7 @@ function LeaveFormEmployee() {
       console.log("Data to be sent to theserver", newLeave);
       try {
         await axios.post(
-          "http://localhost:5000/api/leavedetailstables",
+          `http://localhost:5000/api/leavedetailstables/${id}`,
           newLeave
         );
 
@@ -79,7 +80,8 @@ function LeaveFormEmployee() {
     } else {
       console.log("Selected employee not found");
     }
-    navigate1("/leaveDetails");
+    //navigate1(`/visitprofile/${data.id} `);
+    navigate1("/employeepages ");
   };
 
   return (

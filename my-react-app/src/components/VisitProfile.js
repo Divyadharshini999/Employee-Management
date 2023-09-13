@@ -49,7 +49,7 @@ function VisitProfile() {
         </tr>
         <tr>
           <td>
-            <h5>ID:</h5>
+            <h5>ID</h5>
           </td>{" "}
           <td>
             <h5>{profileData.id}</h5>
@@ -57,7 +57,7 @@ function VisitProfile() {
         </tr>
         <tr>
           <td>
-            <h5>Name:</h5>
+            <h5>Name</h5>
           </td>{" "}
           <td>
             <h5>{profileData.names}</h5>
@@ -66,7 +66,7 @@ function VisitProfile() {
 
         <tr>
           <td>
-            <h5>Date of Joining:</h5>
+            <h5>Date of Joining</h5>
           </td>{" "}
           <td>
             <h5>{profileData.dojs}</h5>
@@ -75,7 +75,7 @@ function VisitProfile() {
 
         <tr>
           <td>
-            <h5>Experiences:</h5>{" "}
+            <h5>Experiences</h5>{" "}
           </td>
           <td>
             <h5>{profileData.Experiences} Year</h5>
@@ -84,7 +84,7 @@ function VisitProfile() {
         <tr>
           <td>
             {" "}
-            <h5>Email:</h5>
+            <h5>Email</h5>
           </td>{" "}
           <td>
             <h5>{profileData.email}</h5>
@@ -92,6 +92,7 @@ function VisitProfile() {
         </tr>
       </table>
 
+      <br></br>
       <br></br>
       {/* <Link to="/profile">Back to Profile</Link> */}
       <Link to={`/update/${profileData.id} `} className="updatebutton">
