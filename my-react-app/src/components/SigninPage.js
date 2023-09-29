@@ -10,6 +10,7 @@ function SigninPage() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [user, setUser] = useState(null);
+  const [id, setid] = useState();
 
   const handleSignin = (e) => {
     e.preventDefault();
@@ -23,7 +24,36 @@ function SigninPage() {
           if (response.data.role === "admin") {
             navigate("/read");
           } else if (response.data.role === "employee") {
-            navigate("/employeepages"); // Navigate to employeepages for employees
+            // Fetch the employee's ID based on their email
+            axios
+              .get(`http://localhost:5000/api/signup/${email}`)
+              .then((response) => {
+                const employeeId = response.data.id;
+
+                // Check if the employee's ID exists in the "emplyee_management" table
+                axios
+                  .get(
+                    `http://localhost:5000/api/emplyee_management/${employeeId}`
+                  )
+                  .then((response) => {
+                    if (response.data) {
+                      // Navigate to the "visitprofile" page with the employee's ID
+                      navigate(`/visitprofile/${employeeId}`);
+                    } else {
+                      navigate("/");
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Error fetching employee details:", error);
+                    navigate("/");
+                  });
+              })
+              .catch((error) => {
+                console.error("Error fetching employee ID:", error);
+                navigate("/");
+              });
+          } else {
+            navigate("/"); // Navigate to a default page if sign-in is not successful
           }
         } else {
           navigate("/"); // Navigate to a default page if sign-in is not successful
@@ -66,6 +96,9 @@ function SigninPage() {
       <div className="container">
         <form className="leaverangeformin" onSubmit={handleSignin}>
           <div className="innercontainerOfDiv">
+            {/* Your input fields and other form elements here */}
+            {/* ... */}
+
             <input
               type="email"
               value={email}

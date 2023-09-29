@@ -4,21 +4,22 @@ import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import CreatePage from "./components/CreatePage";
 import ReadPage from "./components/ReadPage";
-// import ReadParticularIDPage "./components/ReadParticularIDPage";
+
 import UpdatePage from "./components/UpdatePage";
 import LeavePage from "./components/LeavePage";
 import LeaveRange from "./components/LeaveRange";
 import EmployeeLeaveDetails from "./components/EmployeeLeaveDetails";
 import SignUpPage from "./components/SignUpPage";
 import SigninPage from "./components/SigninPage";
-import AdminPage from "./components/AdminPage";
+
 import EmployeePage from "./components/EmployeePage";
-//import Profile from "./components/Profile";
-//import NewProfile from "./components/NewProfile";
+
 import LeaveFormEmployee from "./components/LeaveFormEmployee";
 import EmployeePages from "./components/EmployeePages";
 import VisitProfile from "./components/VisitProfile";
 import UpdatePageAdmin from "./components/UpdatePageAdmin";
+import AdminDashboard from "./components/AdminDashboard";
+import Login from "./components/Login";
 
 function ProtectedRoute({ role, children }) {
   // Check the user's role and render the component or redirect accordingly
@@ -46,6 +47,9 @@ function App() {
           <Route path="/visitprofile/:id" element={<VisitProfile />} />
           <Route path="/rangeemployee" element={<LeaveFormEmployee />} />
           <Route path="/updatebyadmin/:id" element={<UpdatePageAdmin />} />
+          <Route path="/admindash" element={<AdminDashboard />} />
+          <Route path="/login" element={<Login />} />
+
           <Route
             path="/create"
             element={

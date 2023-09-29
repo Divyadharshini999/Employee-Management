@@ -10,7 +10,6 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
-//const { Connection } = require("mysql2/typings/mysql/lib/Connection");
 
 let data = [
   { id: 1, names: "hbmju", Experiences: 1, dojs: "2000-01-03" },
@@ -47,7 +46,39 @@ const isAdmin = (req, res, next) => {
   }
 };
 
-// Get all data
+//////////////////////////////////////////////////////////////
+
+// JWT secret key (should be stored securely)
+const secretKey = "your-secret-key";
+
+// API endpoint for user login and generating JWT
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  // Verify the email and password against the database (you should hash and compare passwords securely)
+  db.query(
+    "SELECT * FROM signup WHERE email = ? AND password = ?",
+    [email, password],
+    (err, results) => {
+      if (err) {
+        throw err;
+      }
+      if (results.length === 0) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      // User authenticated, generate JWT
+      const user = results[0];
+      const token = jwt.sign({ id: user.id, role: user.role }, secretKey, {
+        expiresIn: "1h", // Token expires in 1 hour
+      });
+
+      res.json({ token });
+    }
+  );
+});
+
+// Get all data.............[original]
 app.get("/api/emplyee_management", (req, res) => {
   const selectQuery = "SELECT * FROM emplyee_management ";
   db.query(selectQuery, (err, data) => {
@@ -59,12 +90,14 @@ app.get("/api/emplyee_management", (req, res) => {
     res.json(data);
   });
 });
+//.............................
 
 // API route to fetch data by ID
 app.get("/api/emplyee_management/:id", (req, res) => {
   const id = req.params.id;
   const selectQuery = `SELECT names, Experiences,dojs,email FROM emplyee_management WHERE id = ?`;
-
+  console.log(req.role);
+  // console.log("User role:",req.user.role);
   db.query(selectQuery, [id], (err, result) => {
     if (err) {
       console.error("Error fetching data:", err);
@@ -172,19 +205,6 @@ app.get("/api/leaves", (req, res) => {
   });
 });
 
-//api call get id,names from emplyee_management table
-app.get("/api/emplyee_management", (req, res) => {
-  const query = "SELECT id, names from emplyee_management";
-  connection.query(query, (error, results) => {
-    if (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal server error" });
-      return;
-    }
-    res.json(results);
-  });
-});
-
 //api get names from leavetypetable
 app.get("/api/leaves", (req, res) => {
   const query = "SELECT leave_id,leavetypeNames from leavetypenametables";
@@ -249,6 +269,25 @@ app.post("/api/leavedetailstables", (req, res) => {
   });
 });
 
+app.post("/api/leavedetailstables/:id", (req, res) => {
+  const { id, leave_id, startDate, endDate } = req.body;
+  const insertQuery =
+    "INSERT INTO leavedetailstables (id,leave_id, startDate, endDate) VALUES ( ?, ?, ?,?)";
+  if (!id || !leave_id || !startDate || !endDate) {
+    return res
+      .status(400)
+      .json({ message: "Invalid Data. All fields are required" });
+  }
+
+  db.query(insertQuery, [id, leave_id, startDate, endDate], (err, result) => {
+    if (err) {
+      console.error("Error adding leave details:", err);
+      return res.status(500).json({ message: "Error adding leave details" });
+    }
+    res.status(201).json({ message: "Leave details added successfully" });
+  });
+});
+
 //signup
 app.post("/api/signup", (req, res) => {
   const { usernames, email, password, role, id } = req.body;
@@ -278,28 +317,40 @@ app.post("/api/signup", (req, res) => {
   });
 });
 
-// Get all data
-app.get("/api/signup", (req, res) => {
-  //const email = req.params.email;
-  const selectQuery = "SELECT * FROM signup  ";
-
-  db.query(selectQuery, (err, data) => {
+app.get("/api/signup/:email", (req, res) => {
+  const email = req.params.email;
+  const selectQuery = "SELECT id FROM signup WHERE email = ?";
+  db.query(selectQuery, [email], (err, result) => {
     if (err) {
-      console.error("Error fetching user details:", err);
-      res.status(500).send({ message: "Error fetching user details" });
-      return;
-    }
-    if (data.length === 0) {
-      res.status(404).json({ message: "User not found" });
+      console.error("Error fetching employee ID:", err);
+      res.status(500).json({ message: "Error fetching employee ID" });
+    } else if (result.length === 0) {
+      res.status(404).json({ message: "Employee not found" });
     } else {
-      res.json(data);
+      res.json(result[0]);
     }
   });
 });
 
-//signin
+function verifyToken(req, res, next) {
+  const token = req.header("authorization");
+  if (!token) {
+    return res.status(401).json({ message: "Access Denied" });
+  }
+  try {
+    const decoded = jwt.verify(token, "secretkey");
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(400).json({ message: "Invalid  token" });
+  }
+}
+
+//signin//////.....
 app.post("/api/signin", (req, res) => {
   const { email, password } = req.body;
+  const role = "admin";
+  const token = jwt.sign({ role: role }, "secret-key");
 
   const selectQuery = "SELECT * FROM signup WHERE email = ?";
   db.query(selectQuery, [email], (err, result) => {
@@ -316,38 +367,18 @@ app.post("/api/signin", (req, res) => {
           console.error("Error comparing passwords:", err);
           res.status(500).json({ message: "Error comparing passwords" });
         } else if (match) {
-          res
-            .status(200)
-            .json({ message: "Sign-in successful", role: result[0].role });
-          console.log("correct email and password", result);
+          res.status(200).json({
+            message: "Sign-in successful",
+            role: result[0].role,
+            token,
+          });
+          console.log("correct email and password", result, token);
+          //res.json({ token });
         } else {
           res.status(401).json({ message: "Invalid credentials" });
           console.error("Password or email not match");
         }
       });
-    }
-  });
-});
-
-app.get("/api/emplyee_managements/:id", (req, res) => {
-  const id = req.params.id;
-  const selectQuery = `
-  SELECT em.id, em.names, em.Experiences, em.dojs, s.email, s.role FROM emplyee_management em LEFT JOIN signup s ON em.id = s.id WHERE em.id = ?
-  `;
-
-  db.query(selectQuery, [id], (err, result) => {
-    if (err) {
-      console.error("Error fetching employee data:", err);
-      res.status(500).json({ message: "Error fetching employee data" });
-    } else if (result.length === 0) {
-      res.status(401).json({ message: "Employee data not found" });
-    } else {
-      const user = result[0];
-      if (user.names) {
-        res.json(user);
-      } else {
-        res.status(500).json({ message: "Invalid employee data" });
-      }
     }
   });
 });
@@ -392,6 +423,7 @@ app.get("/api/profile", (req, res) => {
       return res.status(404).json({ message: "Employee not found" });
     }
 
+    // Return the combined data for the specified id
     res.json(result[0]);
   });
 });
