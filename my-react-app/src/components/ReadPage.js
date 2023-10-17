@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API_URL } from "../Constants/Url";
 import "../index1.css";
+import WelcomeLayout from "./WelcomeLayout";
 
 function ReadPage() {
   const [data, setAPIData1] = useState([]);
@@ -17,7 +18,13 @@ function ReadPage() {
 
   const callGetApi1 = async () => {
     try {
-      const response = await axios.get(API_URL);
+      const token = localStorage.getItem("userToken");
+      const role = localStorage.getItem("userRole");
+      const id = localStorage.getItem("userId");
+      const response = await axios.get(API_URL, {
+        headers: { Authorization: token, role, id },
+      });
+
       setAPIData1(response.data);
     } catch (error) {
       // if (response.status === 200) {
@@ -39,35 +46,15 @@ function ReadPage() {
     <div className="rinnercontainer">
       <br></br>
       <br></br>
+      <br></br>
 
-      <ul class="nav flex-row">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/read">
-            Home
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leave">
-            Leave Type
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/range">
-            Leave form
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leaveDetails">
-            Leave Details
-          </a>
-        </li>
-      </ul>
-
+      <WelcomeLayout></WelcomeLayout>
       {/* <div className="readpage"> */}
       <br></br>
       <br></br>
       <br></br>
-      <br></br>
+      {/* <br></br>
+      <br></br> */}
       <Link to="/create" className="newcreatelink">
         CREATE NEW EMPLOYEE
       </Link>
@@ -76,51 +63,51 @@ function ReadPage() {
       {/* </div>  */}
       <div className="readtables">
         <table className="readtable" cellPadding={10}>
-          <tr className="theading">
-            <td>ID</td>
-            <td>NAME</td>
-            <td>EXPERIENCE</td>
-            <td>DATE OF JOINING</td>
-            <td>DELETE</td>
-            <td>UPDATE</td>
-          </tr>
-          {/* the values we gonna read it in the table format by using "map()method" and assigning "id"as a key*/}
-          {data.map((data) => (
-            <tr key={data.id}>
-              <td>{data.id}</td>
-              <td>{data.names}</td>
-              <td>{data.Experiences}</td>
-              <td>{data.dojs}</td>
-
-              {/* for deleting the values , that particular "ID" or Array will be deleted */}
-              <td>
-                <button
-                  className="deletebutton"
-                  onClick={() => handleDelete(data.id)}
-                >
-                  DELETE
-                </button>
-              </td>
-
-              {/* for updating the values, all the datas should be pass to Update page*/}
-              <td>
-                {/* <button className="updatebutton" onClick={() => updateUser(data)}>
-                UPDATE
-              </button> */}
-                <Link
-                  to={`/updatebyadmin/${data.id} `}
-                  className="updatebutton"
-                >
-                  UPDATE
-                </Link>
-              </td>
-              <td></td>
+          <thead>
+            <tr className="theading">
+              <th>ID</th>
+              <th>NAME</th>
+              <th>EXPERIENCE</th>
+              <th>DATE OF JOINING</th>
+              <th>DELETE</th>
+              <th>UPDATE</th>
             </tr>
-          ))}
+          </thead>
+          {/* the values we gonna read it in the table format by using "map()method" and assigning "id"as a key*/}
+          <tbody>
+            {data.map((data) => (
+              <tr key={data.id}>
+                <td>{data.id}</td>
+                <td>{data.names}</td>
+                <td>{data.Experiences}</td>
+                <td>{data.dojs}</td>
+
+                {/* for deleting the values , that particular "ID" or Array will be deleted */}
+                <td>
+                  <button
+                    className="deletebutton"
+                    onClick={() => handleDelete(data.id)}
+                  >
+                    DELETE
+                  </button>
+                </td>
+
+                {/* for updating the values, all the datas should be pass to Update page*/}
+                <td>
+                  <Link
+                    to={`/updatebyadmin/${data.id} `}
+                    className="updatebutton"
+                  >
+                    UPDATE
+                  </Link>
+                </td>
+                <td></td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>
-    // </div>
   );
 }
 

@@ -2,6 +2,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+//import { useUser } from "./userContext1"; // Import the useUser hook
 
 function SigninPage() {
   const navigate = useNavigate();
@@ -19,44 +20,24 @@ function SigninPage() {
       .post("http://localhost:5000/api/signin", { email, password })
       .then((response) => {
         if (response.data.message === "Sign-in successful") {
-          setUser(response.data);
+          // Store user data in local storage
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("userRole", response.data.role);
+          localStorage.setItem("userId", response.data.id);
+          //localStorage.setItem("token", response.data.token);
 
           if (response.data.role === "admin") {
             navigate("/read");
           } else if (response.data.role === "employee") {
-            // Fetch the employee's ID based on their email
-            axios
-              .get(`http://localhost:5000/api/signup/${email}`)
-              .then((response) => {
-                const employeeId = response.data.id;
-
-                // Check if the employee's ID exists in the "emplyee_management" table
-                axios
-                  .get(
-                    `http://localhost:5000/api/emplyee_management/${employeeId}`
-                  )
-                  .then((response) => {
-                    if (response.data) {
-                      // Navigate to the "visitprofile" page with the employee's ID
-                      navigate(`/visitprofile/${employeeId}`);
-                    } else {
-                      navigate("/");
-                    }
-                  })
-                  .catch((error) => {
-                    console.error("Error fetching employee details:", error);
-                    navigate("/");
-                  });
-              })
-              .catch((error) => {
-                console.error("Error fetching employee ID:", error);
-                navigate("/");
-              });
-          } else {
-            navigate("/"); // Navigate to a default page if sign-in is not successful
+            const employeeId = response.data.id;
+            if (employeeId) {
+              // navigate("/visitprofile/" + response.data.id);
+              // navigate(`/visitprofile/${response.data.id}`);
+              navigate(`/visitprofile/${employeeId}`);
+            }
           }
         } else {
-          navigate("/"); // Navigate to a default page if sign-in is not successful
+          navigate("/");
         }
       })
       .catch((error) => {
@@ -75,24 +56,9 @@ function SigninPage() {
     <div className="rinnercontainer">
       <br></br>
       <br></br>
+      <br></br>
+      <br></br>
 
-      <ul class="nav flex-row">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">
-            Welcome to React
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/signin">
-            Signin
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">
-            Signup
-          </a>
-        </li>
-      </ul>
       <div className="container">
         <form className="leaverangeformin" onSubmit={handleSignin}>
           <div className="innercontainerOfDiv">

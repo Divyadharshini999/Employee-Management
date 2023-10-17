@@ -10,6 +10,8 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+//const secretKey = "ypur-secret-key";
+//const { Connection } = require("mysql2/typings/mysql/lib/Connection");
 
 let data = [
   { id: 1, names: "hbmju", Experiences: 1, dojs: "2000-01-03" },
@@ -36,20 +38,6 @@ db.connect((err) => {
   }
   console.log("connected to mysql");
 });
-
-// Middleware to check if the user is an admin
-const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === "admin") {
-    return next(); // User is an admin, allow access
-  } else {
-    return res.status(403).json({ message: "Access denied" });
-  }
-};
-
-//////////////////////////////////////////////////////////////
-
-// JWT secret key (should be stored securely)
-const secretKey = "your-secret-key";
 
 // API endpoint for user login and generating JWT
 app.post("/login", (req, res) => {
@@ -78,20 +66,6 @@ app.post("/login", (req, res) => {
   );
 });
 
-// Get all data.............[original]
-app.get("/api/emplyee_management", (req, res) => {
-  const selectQuery = "SELECT * FROM emplyee_management ";
-  db.query(selectQuery, (err, data) => {
-    if (err) {
-      console.error("Error connecting to mysql:", err);
-      res.status(500).send("Error fetching data");
-      return;
-    }
-    res.json(data);
-  });
-});
-//.............................
-
 // API route to fetch data by ID
 app.get("/api/emplyee_management/:id", (req, res) => {
   const id = req.params.id;
@@ -114,35 +88,6 @@ app.get("/api/emplyee_management/:id", (req, res) => {
         email: result[0].email,
       });
     }
-  });
-});
-
-//create new data
-app.post("/api/emplyee_management", isAdmin, (req, res) => {
-  const { names, Experiences, dojs, email } = req.body;
-  const insertQuery = "INSERT INTO emplyee_management SET ?";
-  if (!names) {
-    return res.status(400).json({ message: "Name is required" });
-  }
-  if (!Experiences) {
-    return res.status(400).json({ message: "Experience is required" });
-  }
-  if (!dojs) {
-    return res.status(400).json({ message: "Date Of Joining is required" });
-  }
-  if (!email) {
-    return res.status(400).json({ message: "email is required" });
-  }
-
-  const newItem = { names, Experiences, dojs, email };
-
-  db.query(insertQuery, newItem, (err, result) => {
-    if (err) {
-      console.error("Error adding employee:", err);
-      return res.status(500).json({ message: "Error adding employee" });
-    }
-    newItem.id = result.insertId;
-    res.status(201).json(newItem);
   });
 });
 
@@ -328,82 +273,44 @@ app.get("/api/signup/:email", (req, res) => {
       res.status(404).json({ message: "Employee not found" });
     } else {
       res.json(result[0]);
+      //console.log(result[0]);
     }
   });
 });
 
-function verifyToken(req, res, next) {
-  const token = req.header("authorization");
+const verifyToken = (req, res, next) => {
+  //const user=admin;
+  const token = req.headers.authorization;
+  //const token = req.header("Authorization");
+
   if (!token) {
-    return res.status(401).json({ message: "Access Denied" });
+    return res.status(403).json({ message: "No token provided." });
   }
-  try {
-    const decoded = jwt.verify(token, "secretkey");
+
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      console.error("Token verification failed", err);
+      return res.status(401).json({ message: "Failed to authenticate token" });
+    }
+
     req.user = decoded;
     next();
-  } catch (error) {
-    res.status(400).json({ message: "Invalid  token" });
-  }
-}
+  });
+};
 
-//signin//////.....
-app.post("/api/signin", (req, res) => {
-  const { email, password } = req.body;
-  const role = "admin";
-  const token = jwt.sign({ role: role }, "secret-key");
-
-  const selectQuery = "SELECT * FROM signup WHERE email = ?";
-  db.query(selectQuery, [email], (err, result) => {
+app.get("/api/emplyee_management", verifyToken, (req, res) => {
+  const selectQuery = "SELECT * FROM emplyee_management ";
+  db.query(selectQuery, (err, data) => {
     if (err) {
-      console.error("Error fetching user:", err);
-      res.status(500).json({ message: "Error fetching user" });
-    } else if (result.length === 0) {
-      res.status(401).json({ message: "User not found" });
-    } else {
-      const storedHash = result[0].password;
-
-      bcrypt.compare(password, storedHash, (err, match) => {
-        if (err) {
-          console.error("Error comparing passwords:", err);
-          res.status(500).json({ message: "Error comparing passwords" });
-        } else if (match) {
-          res.status(200).json({
-            message: "Sign-in successful",
-            role: result[0].role,
-            token,
-          });
-          console.log("correct email and password", result, token);
-          //res.json({ token });
-        } else {
-          res.status(401).json({ message: "Invalid credentials" });
-          console.error("Password or email not match");
-        }
-      });
+      console.error("Error connecting to mysql:", err);
+      res.status(500).send("Error fetching data");
+      return;
     }
+    res.json(data);
   });
 });
 
-app.post("/api/profile", (req, res) => {
-  const { id, email } = req.body;
-  const insertQuery = "INSERT INTO profile SET ?";
-  if (!id || !email) {
-    return res.status(400).json({ message: "Both id and email are required" });
-  }
-
-  const newItem = { id, email };
-
-  db.query(insertQuery, newItem, (err, result) => {
-    if (err) {
-      console.error("Error adding profile:", err);
-      return res.status(500).json({ message: "Error adding profile" });
-    }
-    newItem.id = result.insertId;
-    res.status(201).json(newItem);
-  });
-});
-
-// API route to fetch profile data by ID from both tables
-app.get("/api/profile", (req, res) => {
+app.get("/api/profile", verifyToken, (req, res) => {
   const id = req.query.id;
 
   const selectQuery = `
@@ -425,7 +332,147 @@ app.get("/api/profile", (req, res) => {
 
     // Return the combined data for the specified id
     res.json(result[0]);
+    //res.json({ message: "Profile data" });
   });
+});
+
+//signin//////.....
+app.post("/api/signin", (req, res) => {
+  const { email, password } = req.body;
+  //const role = "admin";
+  //const token = jwt.sign({ role: role }, "secretkey");
+
+  const selectQuery = "SELECT * FROM signup WHERE email = ?";
+  db.query(selectQuery, [email], (err, result) => {
+    if (err) {
+      console.error("Error fetching user:", err);
+      res.status(500).json({ message: "Error fetching user" });
+    } else if (result.length === 0) {
+      res.status(401).json({ message: "User not found" });
+    } else {
+      const storedHash = result[0].password;
+      //const token = jwt.sign({ role: role }, "secretkey");
+
+      bcrypt.compare(password, storedHash, (err, match) => {
+        if (err) {
+          console.error("Error comparing passwords:", err);
+          res.status(500).json({ message: "Error comparing passwords" });
+        } else if (match) {
+          const role = result[0].role;
+          const token = jwt.sign({ role: role }, "secretKey");
+          res.status(200).json({
+            message: "Sign-in successful",
+            //role,
+
+            role: role,
+            id: result[0].id,
+            token,
+          });
+          console.log("correct email and password", result, token);
+          //res.json({ token });
+        } else {
+          res.status(401).json({ message: "Invalid credentials" });
+          console.error("Password or email not match");
+        }
+      });
+    }
+  });
+});
+
+app.post("/api/profile", verifyToken, (req, res) => {
+  const { id, email } = req.body;
+  const insertQuery = "INSERT INTO profile SET ?";
+  if (!id || !email) {
+    return res.status(400).json({ message: "Both id and email are required" });
+  }
+
+  const newItem = { id, email };
+
+  db.query(insertQuery, newItem, (err, result) => {
+    if (err) {
+      console.error("Error adding profile:", err);
+      return res.status(500).json({ message: "Error adding profile" });
+    }
+    newItem.id = result.insertId;
+    res.status(201).json(newItem);
+  });
+});
+
+app.post("/api/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ message: "Logout failed" });
+    } else {
+      res.json({ message: "Logout successful" });
+    }
+  });
+});
+//const port = process.env.PORT || 3000;
+
+//new api
+app.get("/api/user", verifyToken, (req, res) => {
+  // Inside this endpoint, you can access the user's information based on their token.
+  // You should replace this code with your actual logic to fetch user data from your database.
+
+  const userId = req.user.id; // Access the user's ID from the token
+
+  // Fetch user data from your database (replace with your database logic)
+  const selectQuery = "SELECT * FROM signup WHERE id = ?";
+  db.query(selectQuery, [userId], (err, result) => {
+    if (err) {
+      console.error("Error fetching user data:", err);
+      return res.status(500).json({ message: "Error fetching user data" });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Return the user data as a JSON response
+    const userData = {
+      id: result[0].id,
+      usernames: result[0].usernames,
+      email: result[0].email,
+      // Add other user data fields as needed
+    };
+
+    res.json(userData);
+  });
+});
+
+const isTokenValid = (token) => {
+  try {
+    // Use your secret key (or public key for RS256) to verify the token's signature
+    // Replace 'yourSecretKey' with your actual secret key.
+    const decoded = jwt.verify(token, "yourSecretKey");
+
+    // Check if the token has expired
+    if (decoded.exp && Date.now() >= decoded.exp * 1000) {
+      return false; // Token is expired
+    }
+
+    // Add any additional custom validation logic here
+    // For example, you might check custom claims in the token.
+
+    return true; // Token is valid
+  } catch (error) {
+    return false; // Token is invalid or has an issue (e.g., expired, malformed)
+  }
+};
+app.get("/api/employees", (req, res) => {
+  const userRole = getUserRole(req);
+
+  if (userRole === "admin") {
+    // Handle logic for admin role
+    res.json({ message: "You have admin access to employee data" });
+  } else if (userRole === "employee") {
+    // Handle logic for employee role
+    res.json({ message: "You have employee access to employee data" });
+  } else {
+    // Handle cases where the role is not defined or unauthorized
+    res.status(403).json({ message: "Access denied" });
+  }
 });
 
 app.listen(port, () => {

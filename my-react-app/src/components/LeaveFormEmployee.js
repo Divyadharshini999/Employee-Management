@@ -81,25 +81,17 @@ function LeaveFormEmployee() {
       console.log("Selected employee not found");
     }
     //navigate1(`/visitprofile/${data.id} `);
-    navigate1("/employeepages ");
+    navigate1("/signin ");
   };
 
   return (
     <div className="rinnercontainer">
       <br></br>
       <br></br>
+      <br></br>
+      <br></br>
 
       <ul class="nav flex-row">
-        {/* <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/read">
-            Home
-          </a>
-        </li> */}
-        {/* <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leave">
-            Leave Type
-          </a>
-        </li> */}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/rangeemployee">
             Apply Leave
@@ -110,15 +102,6 @@ function LeaveFormEmployee() {
             Logout
           </a>
         </li>
-        {/* <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
-            href="newprofile/${id}"
-          >
-            Profile
-          </a>
-        </li> */}
       </ul>
 
       <form className="leaverangeform">

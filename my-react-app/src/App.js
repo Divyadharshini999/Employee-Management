@@ -1,107 +1,76 @@
-// App.js
-
+// //App.js
 import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import CreatePage from "./components/CreatePage";
 import ReadPage from "./components/ReadPage";
-
-import UpdatePage from "./components/UpdatePage";
 import LeavePage from "./components/LeavePage";
 import LeaveRange from "./components/LeaveRange";
 import EmployeeLeaveDetails from "./components/EmployeeLeaveDetails";
 import SignUpPage from "./components/SignUpPage";
 import SigninPage from "./components/SigninPage";
-
-import EmployeePage from "./components/EmployeePage";
-
-import LeaveFormEmployee from "./components/LeaveFormEmployee";
-import EmployeePages from "./components/EmployeePages";
 import VisitProfile from "./components/VisitProfile";
+import Logout from "./components/Logout";
+import NotFound from "./components/NotFound";
+import LeaveFormEmployee from "./components/LeaveFormEmployee";
 import UpdatePageAdmin from "./components/UpdatePageAdmin";
-import AdminDashboard from "./components/AdminDashboard";
-import Login from "./components/Login";
-
-function ProtectedRoute({ role, children }) {
-  // Check the user's role and render the component or redirect accordingly
-  if (role === "admin" || role === "employee") {
-    return children;
-  } else {
-    return <Navigate to="/employeepages" />;
-  }
-}
+import UpdatePage from "./components/UpdatePage";
 
 function App() {
-  const user = {
-    // Simulated user data with role
-    role: "employee", // Change this based on the actual user's role
-  };
+  const userRole = localStorage.getItem("userRole");
 
   return (
-    <div className="container">
-      {/* ... your navigation */}
-      <div className="addinput">
-        <Routes>
-          <Route path="/" element={<SignUpPage />} />
-          <Route path="/signin" element={<SigninPage />} />
-          <Route path="/employeepages" element={<EmployeePages />} />
-          <Route path="/visitprofile/:id" element={<VisitProfile />} />
-          <Route path="/rangeemployee" element={<LeaveFormEmployee />} />
-          <Route path="/updatebyadmin/:id" element={<UpdatePageAdmin />} />
-          <Route path="/admindash" element={<AdminDashboard />} />
-          <Route path="/login" element={<Login />} />
+    <div className="rinnercontainer">
+      <div className="container">
+        <div className="addinput">
+          <Routes>
+            <Route path="/" element={<SignUpPage />} />
+            <Route path="/signin" element={<SigninPage />} />
 
-          <Route
-            path="/create"
-            element={
-              <ProtectedRoute role={user.role}>
-                <CreatePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/read"
-            element={
-              <ProtectedRoute role={user.role}>
-                <ReadPage />
-              </ProtectedRoute>
-            }
-          />
+            {userRole === "admin" ? (
+              // Admin Routes
+              <>
+                <Route path="/read" element={<ReadPage />} />
+                <Route path="/leave" element={<LeavePage />} />
+                <Route path="/range" element={<LeaveRange />} />
+                <Route path="/create" element={<CreatePage />} />
+                <Route
+                  path="/leaveDetails"
+                  element={<EmployeeLeaveDetails />}
+                />
+                <Route
+                  path="/updatebyadmin/:id"
+                  element={<UpdatePageAdmin />}
+                />
 
-          <Route path="/update/:id" element={<UpdatePage />} />
-          <Route
-            path="/leave"
-            element={
-              <ProtectedRoute role={user.role}>
-                <LeavePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/range"
-            element={
-              <ProtectedRoute role={user.role}>
-                <LeaveRange />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employeepage"
-            element={
-              <ProtectedRoute role={user.role}>
-                <EmployeePage />
-              </ProtectedRoute>
-            }
-          />
+                <Route
+                  path="/visitprofile/:id"
+                  element={<Navigate to="/404" />}
+                />
+                <Route path="/rangeemployee" element={<Navigate to="/404" />} />
+              </>
+            ) : userRole === "employee" ? (
+              // Employee Routes
+              <>
+                <Route path="/visitprofile/:id" element={<VisitProfile />} />
+                <Route path="/rangeemployee" element={<LeaveFormEmployee />} />
+                <Route path="/update/:id" element={<UpdatePage />} />
+                <Route path="/read" element={<Navigate to="/404" />} />
+                <Route path="/leave" element={<Navigate to="/404" />} />
+                <Route path="/range" element={<Navigate to="/404" />} />
+                <Route path="/leaveDetails" element={<Navigate to="/404" />} />
+                <Route
+                  path="/updatebyadmin/:id"
+                  element={<Navigate to="/404" />}
+                />
+              </>
+            ) : (
+              <Route path="*" element={<Navigate to="/404" replace />} />
+            )}
 
-          <Route
-            path="/leaveDetails"
-            element={
-              <ProtectedRoute role={user.role}>
-                <EmployeeLeaveDetails />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+            <Route path="/logout" element={<Logout />} />
+            <Route path="404" element={<NotFound />} />
+          </Routes>
+        </div>
       </div>
     </div>
   );

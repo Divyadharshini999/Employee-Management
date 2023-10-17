@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 //import { API_URL } from "../Constants/Url";
 import { Link } from "react-router-dom";
+import WelcomeLayout from "./WelcomeLayout";
 //import { API_URL } from "../Constants/Url";
 
 function EmployeeLeaveDetails() {
@@ -33,29 +34,8 @@ function EmployeeLeaveDetails() {
     <div className="rinnercontainer">
       <br></br>
       <br></br>
-
-      <ul class="nav flex-row">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/read">
-            Home
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leave">
-            Leave Type
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/range">
-            Leave form
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leaveDetails">
-            Leave Details
-          </a>
-        </li>
-      </ul>
+      <br></br>
+      <WelcomeLayout></WelcomeLayout>
 
       <div className="readpage1">
         <br></br>

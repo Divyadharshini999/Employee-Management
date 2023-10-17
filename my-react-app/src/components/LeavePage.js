@@ -1,6 +1,7 @@
 // Leave.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import WelcomeLayout from "./WelcomeLayout";
 //import { useParams, useNavigate, Link } from "react-router-dom";
 
 function LeavePage() {
@@ -43,29 +44,8 @@ function LeavePage() {
     <div className="rinnercontainer">
       <br></br>
       <br></br>
-
-      <ul class="nav flex-row">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/read">
-            Home
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leave">
-            Leave Type
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/range">
-            Leave form
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leaveDetails">
-            Leave Details
-          </a>
-        </li>
-      </ul>
+      <br></br>
+      <WelcomeLayout></WelcomeLayout>
 
       <div className="containerLeaveForm">
         {/* <h5>Add Leave</h5> */}

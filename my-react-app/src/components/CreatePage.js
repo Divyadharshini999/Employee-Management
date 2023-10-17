@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import WelcomeLayout from "./WelcomeLayout";
 
 const schema = yup.object().shape({
   names: yup.string().required("Please enter the Name"),
@@ -41,29 +42,9 @@ function CreatePage() {
     <div className="rinnercontainer">
       <br></br>
       <br></br>
+      <br></br>
+      <WelcomeLayout></WelcomeLayout>
 
-      <ul class="nav flex-row">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/read">
-            Home
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leave">
-            Leave Type
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/range">
-            Leave form
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leaveDetails">
-            Leave Details
-          </a>
-        </li>
-      </ul>
       <br></br>
 
       <form

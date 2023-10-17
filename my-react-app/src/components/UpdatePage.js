@@ -53,6 +53,8 @@ function UpdatePage() {
     <div className="rinnercontainer">
       <br></br>
       <br></br>
+      <br></br>
+      <br></br>
 
       <ul class="nav flex-row">
         <li class="nav-item">
@@ -60,21 +62,18 @@ function UpdatePage() {
             Welcome to React
           </a>
         </li>
-        {/* <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leave">
-            Leave Type
-          </a>
-        </li> */}
+
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/rangeemployee">
             Leave form
           </a>
         </li>
-        {/* <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/leaveDetails">
-            Leave Details
+
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/logout">
+            Logout
           </a>
-        </li> */}
+        </li>
       </ul>
 
       <div className="updateform">

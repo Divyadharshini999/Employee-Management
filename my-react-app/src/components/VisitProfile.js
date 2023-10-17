@@ -9,10 +9,15 @@ function VisitProfile() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const token = localStorage.getItem("userToken");
         const response = await axios.get(
-          `http://localhost:5000/api/profile?id=${id}`
+          `http://localhost:5000/api/profile?id=${id}`,
+          {
+            headers: { Authorization: token },
+          }
         );
         setProfileData(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -24,6 +29,10 @@ function VisitProfile() {
     <div className="rinnercontainer">
       <br></br>
       <br></br>
+      <br></br>
+      <br></br>
+      {/* <br></br>
+      <br></br> */}
 
       <ul class="nav flex-row">
         <li class="nav-item">
@@ -31,6 +40,7 @@ function VisitProfile() {
             Welcome {profileData.names}!
           </a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/rangeemployee">
             Apply Leave

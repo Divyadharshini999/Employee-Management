@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import WelcomeLayout from "./WelcomeLayout";
 //import { API_URL } from "../Constants/Url";
 //import DatePicker from "react-datepicker";
 
@@ -14,6 +15,7 @@ function LeaveRange() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [leaveData, setLeaveData] = useState([]);
+  const [profileData, setProfileData] = useState({});
 
   useEffect(() => {
     axios
@@ -85,8 +87,11 @@ function LeaveRange() {
     <div className="rinnercontainer">
       <br></br>
       <br></br>
+      <br></br>
+      {/* <br></br>
+      <br></br> */}
 
-      <ul class="nav flex-row">
+      {/* <ul class="nav flex-row">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/read">
             Home
@@ -107,7 +112,13 @@ function LeaveRange() {
             Leave Details
           </a>
         </li>
-      </ul>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/logout">
+            Logout
+          </a>
+        </li>
+      </ul> */}
+      <WelcomeLayout></WelcomeLayout>
 
       <form className="leaverangeform">
         <div className="innercontainerOfDivrange">

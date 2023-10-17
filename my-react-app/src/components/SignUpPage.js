@@ -33,23 +33,6 @@ function SignUpPage() {
       <br></br>
       <br></br>
 
-      <ul class="nav flex-row">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">
-            Welcome to React
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/signin">
-            Signin
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">
-            Signup
-          </a>
-        </li>
-      </ul>
       <div className="signup">
         <br></br>
         <br></br>
