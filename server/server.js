@@ -39,6 +39,8 @@ db.connect((err) => {
   console.log("connected to mysql");
 });
 
+const secretKey = "secretKey";
+
 // API endpoint for user login and generating JWT
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
